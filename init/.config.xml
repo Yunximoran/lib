@@ -1,6 +1,6 @@
 <root>
 	<database>
-		<redis>
+		<redis password="123465">
 			<host>localhost</host>
 			<port>6379</port>
 			<db>0</db>
