@@ -1,0 +1,63 @@
+<root>
+	<global>
+		<encoding>UTF-8</encoding>
+		<logs>
+			<level>info</level>
+		</logs>
+	</global>
+	<computer username="yunximoran" password="ranxi160259">
+		<name>DESKTOP-4UTP93R</name>
+		<os>Windows</os>
+		<version>11 professional</version>
+		<cpu>11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz   2.30 GHz</cpu>
+		<gpu>nvidia rtx3050</gpu>
+		<ram>16</ram>
+		<disk items="#">
+			<li>C:</li>
+		</disk>
+	</computer>
+	<dependon items="#">
+		<li>redis-server ./databasetoo./conf/redis-service.conf</li>
+		<li>npm --prefix view run serve</li>
+	</dependon>
+	<server>
+		<app>core:app</app>
+		<host>127.0.0.1</host>
+		<port>8000</port>
+		<reload>yes</reload>
+		<cors items="跨域资源">
+			<li>https://localhost:8080</li>
+			<li>http://localhost:8080</li>
+			<li>https://127.0.0.1:8080</li>
+			<li>http://127.0.0.1:8080</li>
+		</cors>
+	</server>
+	<sock describe="通信配置">
+		<udp describe="配置组播组和广播地址">
+			<ip-broad>0.0.0.0</ip-broad>
+			<ip-multi>224.255.255.1</ip-multi>
+		</udp>
+		<tcp describe="配置TCP性能参数">
+			<listenes>5</listenes>
+			<timeout>1</timeout>
+		</tcp>
+		<recv-size describe="设置接受字节">1024</recv-size>
+	</sock>
+	<ports describe="端口配置">
+		<udp>
+			<server>8081</server>
+			<broad describe="广播端口，心跳包传输">8082</broad>
+			<multi describe="组播端口，软件清单传输">8083</multi>
+			<client>8084</client>
+		</udp>
+		<tcp>
+			<client describe="客户端指令监听端口">8085</client>
+			<client-file describe="客户端TCP文件接收端口">8086</client-file>
+			<server describe="服务端，结果监听端口">9095</server>
+		</tcp>
+	</ports>
+	<network describe="局域网IP和MAC">
+		<ip>192.168.31.176</ip>
+		<mac>20-1E-88-F5-05-B9</mac>
+	</network>
+</root>
