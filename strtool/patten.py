@@ -4,3 +4,4 @@
 # 匹配URL
 HTTP = r"^https?://"
 URLSTR = ""
+TEST = ""
