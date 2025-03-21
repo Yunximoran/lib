@@ -1,3 +1,75 @@
 <root>
-  ...
+	<global>
+		<encoding>UTF-8</encoding>
+		<logs>
+			<level>info</level>
+		</logs>
+	</global>
+	<computer username="yunximoran" password="ranxi160259">
+		<name>DESKTOP-4UTP93R</name>
+		<os>Windows</os>
+		<version>10.0.26100</version>
+		<machine>AMD64</machine>
+		<cpu>
+			<processor>Intel64 Family 6 Model 141 Stepping 1, GenuineIntel</processor>
+			<physical-cores>8</physical-cores>
+			<logical-cores>16</logical-cores>
+			<architecture>64bit</architecture>
+		</cpu>
+		<gpu>NVIDIA GeForce RTX 3050 Laptop GPU</gpu>
+		<ram>15.75</ram>
+		<disk total="#">
+			<li>C://</li>
+		</disk>
+	</computer>
+	<dependon>
+		<li>redis-server ./databasetoo./conf/redis-service.conf</li>
+		<li>npm --prefix view run serve</li>
+	</dependon>
+	<sock>
+		<udp describe="UDP配置">
+			<ip-broad>255.255.255.255</ip-broad>
+			<ip-multi>224.25.25.1</ip-multi>
+		</udp>
+		<tcp>
+			<listenes>5</listenes>
+			<timeout>1</timeout>
+		</tcp>
+		<recv-size>1024</recv-size>
+		<timeout>1</timeout>
+	</sock>
+	<ports>
+		<udp>
+			<server>8081</server>
+			<broad>8082</broad>
+			<multi>8083</multi>
+			<client>8084</client>
+		</udp>
+		<tcp>
+			<client>8085</client>
+			<client-file>8086</client-file>
+			<server>9095</server>
+		</tcp>
+	</ports>
+	<network>
+		<ip-server>192.168.31.176</ip-server>
+		<ip>192.168.31.176</ip>
+		<mac>20-1E-88-F5-05-B9</mac>
+	</network>
+	<path>
+		<local struct="true">
+			<dir name="data">
+				<li>softwares.json</li>
+				<li>shells.json</li>
+			</dir>
+			<dir name="file">
+			</dir>
+			<dir name="logs">
+			</dir>
+			<dir name="soft">
+			</dir>
+		</local>
+		<logs struct="true">
+		</logs>
+	</path>
 </root>
