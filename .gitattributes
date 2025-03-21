@@ -1,2 +1,2 @@
-.config.project.xml merge=ours
-README.md merge=ours
+.config.project.xml merge=union
+README.md merge=union
