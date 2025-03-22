@@ -3,15 +3,20 @@ from socket import error as SockError
 from functools import wraps
 
 from ._catch import __CatchBase, Logger
+from ._catch import LOGSPATH, LIBPATH
 
 
 class _CatchSock(__CatchBase):
-    logger = Logger("sock", log_file="socket.log")
+    log_path = LOGSPATH.bind(LIBPATH)
+    logger = Logger(
+        name="sock", 
+        log_file="socket.log",
+        log_path=log_path
+    )
     socks = []
-    def __init__(self):
-        pass
     
     def sock(self, func):
+        @wraps(func)
         def wrapper(sock:socket, *args, **kwargs):
             try:
                 sock.getpeername()
@@ -24,6 +29,7 @@ class _CatchSock(__CatchBase):
     
     def checksockconning(self, func):
         # 校验SOCK连接状态
+        @wraps(func)
         def wrapper(sock:socket, *args, **kwargs):
             try:
                 sock.getpeername()

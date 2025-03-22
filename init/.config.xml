@@ -1,6 +1,6 @@
 <root>
 	<database>
-		<redis password="123465">
+		<redis>
 			<host>localhost</host>
 			<port>6379</port>
 			<db>0</db>
@@ -14,7 +14,7 @@
 				<li>accounts</li>
 			</datas>
 		</redis>
-		<mysql user="root" password="redis">
+		<mysql user="root" password="ranxi160259">
 			<host>localhost</host>
 			<port>3306</port>
 			<db>test</db>
@@ -31,6 +31,14 @@
 	<default>
 		<log-settings>
 			<level>info</level>
+			<logs struct="模块日志文件" status="hidden">
+				<dir name="db">
+					<li>redis.log</li>
+					<li>mysql.log</li>
+				</dir>
+				<li>process.log</li>
+				<li>socket.log</li>
+			</logs>
 		</log-settings>
 		<encoding>utf-8</encoding>
 	</default>
