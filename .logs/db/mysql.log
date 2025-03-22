@@ -1,0 +1,18 @@
+2025-03-21 16:22:21,676 - mysql logs - INFO - __execute	execute success show databases
+module: lib.database.mysql._workbench
+2025-03-21 16:29:23,162 - mysql logs - INFO - __execute	execute success show databases
+module: lib.database.mysql._workbench
+2025-03-21 16:29:23,165 - mysql logs - INFO - __execute	execute success show tables
+module: lib.database.mysql._workbench
+2025-03-21 16:43:52,668 - mysql logs - INFO - __execute	execute success show tables
+module: lib.database.mysql._workbench
+2025-03-21 16:44:08,983 - mysql logs - INFO - __execute	execute success show tables
+module: lib.database.mysql._workbench
+2025-03-21 16:44:08,986 - mysql logs - INFO - __execute	execute success select * from course
+module: lib.database.mysql._workbench
+2025-03-21 16:44:17,423 - mysql logs - INFO - __execute	execute success show tables
+module: lib.database.mysql._workbench
+2025-03-21 16:44:17,428 - mysql logs - INFO - __execute	execute success select * from yuanshen
+module: lib.database.mysql._workbench
+2025-03-21 16:47:24,547 - mysql logs - INFO - __execute	execute success show tables
+module: lib.database.mysql._workbench

@@ -274,14 +274,15 @@ class PathNode(_Node):
             raise "path node must a Node or PathNode"
         
         self.parent = parent        # 绑定 父目录 [父节点]
+        self.status = node.attrib["status"] if "status" in node.attrib else "default"
         if isinstance(self.parent, Node):
             self.tag = node.tag     # 目录名称
             self.describe = node.attrib['struct']   # 文件描述
-            self.path = Path(self.tag)
+            self.path = Path(self.__set_path_status()) 
         else:
             self.tag = node.attrib["name"]  # 目录名称
-            self.describe = node.attrib["describe"] if "describe" in node.attrib.keys() else None
-            self.path = parent.path.joinpath(self.tag)
+            self.describe = node.attrib["describe"] if "describe" in node.attrib else None
+            self.path = parent.path.joinpath(self.__set_path_status())
 
         self.dirs: List[PathNode] =[]
         for dir in node.findall("dir"):
@@ -303,6 +304,28 @@ class PathNode(_Node):
             self.dirs, 
             )
         
+    def __set_path_status(self):
+        if self.status == "hidden":
+            return f".{self.tag}"
+        if self.status == "protect":
+            return f"_{self.tag}"
+        if self.status == "private":
+            return f"__{self.tag}"
+        return self.tag
+    
+    def bind(self, last:Path, *args):
+        # 绑定实际路径
+        if isinstance(last, Path):
+            path = last.joinpath(*args)
+        else:
+            path = Path(last).joinpath(*args)
+            
+        if not path.exists():
+            raise PathExistsError(f"{path} is not exists")
+        if path.is_file():
+            raise PathTypeError(f"{path} is not a dir")
+        return path.joinpath(self.path)
+
     def clean(self):
         glob = self.path.glob("*")
         for child in glob:

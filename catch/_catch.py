@@ -1,13 +1,18 @@
-import inspect
+from pathlib import Path
 from functools import wraps
 
 from lib.manager._logger import Logger
+from lib.init.resolver import __resolver
 
+LIBPATH = Path.cwd().joinpath("lib")
+LOGSPATH  = __resolver("default", "log-settings", "logs")
 
 class __CatchBase:
-    logger = Logger("catch", log_file="sys.log")
-    def __init__(self):
-        self.logs = []
+    logger = Logger(
+        name="catch", 
+        log_file="sys.log", 
+        log_path=LOGSPATH.bind(LIBPATH)
+    )
     
     # 默认捕获器
     def catch(self, *args, **kwargs):
@@ -42,9 +47,11 @@ class __CatchBase:
                 return False
         return wrapper
     
-    def record(self, func, msg="success", level=1):
-        logtext = self.logger.format_logtext(func.__name__, msg, module=func.__module__)
-        self.logger.record(level, logtext)
+    def record(self, func, msg="success", level=1, *, logger:Logger=None):
+        if logger is None:
+            logger = self.logger
+        logtext = logger.format_logtext(func.__name__, msg, module=func.__module__)
+        logger.record(level, logtext)
     
     
     def __close__(self):
@@ -52,15 +59,3 @@ class __CatchBase:
             close.close()
 
     
-
-
-    # def __log_record(self, func, msg="success", level=0):
-    #     """
-    #     0: debug
-    #     1: info
-    #     2: waring
-    #     3: error
-    #     4: critical
-    #     """
-    #     logtext = logger.format_logtext(func.__name__, msg, model = func.__module__, path = inspect(func))
-    #     logger.record(level, logtext)
