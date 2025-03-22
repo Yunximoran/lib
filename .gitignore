@@ -1,4 +1,5 @@
 .vscode
 .conda
+.test
 */__pycache__
 *.pyc

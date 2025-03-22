@@ -1,5 +1,6 @@
 import os
 import json
+from typing import List
 from redis import StrictRedis
 
 from lib.init.resolver import __resolver
@@ -21,7 +22,7 @@ class Connector(StrictRedis):
     """
         Redis操作模块，只在redis服务启动后可用
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self):
         super().__init__(
             host=HOST,
             port=PORT, 
@@ -34,12 +35,10 @@ class Connector(StrictRedis):
         self.ping()
     
     
-    def lrange(self, key, start=None, end=None):
-        if start is None:
-            start = 0
+    def lrange(self, key, start = 0, end=None) -> list:
         if end is None:
             end = self.llen(key)
-        return super().lrange(key, 0, end)
+        return super().lrange(key, start, end)
 
     def save(self, **kwargs):
         return super().save(**kwargs)
@@ -51,32 +50,10 @@ class Connector(StrictRedis):
     
     @catch.redis
     def dump(self, tbn, ft):
-        with open(f"data/{tbn}.json", 'w', encoding="uft-8") as f:
-            if ft == "dict":
-                datas = self.hgetall(tbn)
-            
-            if ft == "list":
-                datas = self.lrange(tbn)
-            json.dump(datas, f)
+        pass
     
     @catch.redis
     def load(self):
-        workdir = os.getcwd()
-        for child in os.listdir(os.path.join(workdir, "data")):
-            if os.path.isfile(child):
-                # 获取表名
-                tbn = child.split(".")[0]
-                with open(child, "r") as f:
-                    datas = json.load(f)
-                    if isinstance(datas, dict):
-                        for k in datas:
-                            self.hset(tbn, k, datas[k])
-                    
-                    if isinstance(datas, list):
-                        for d in datas:
-                            self.lpush(tbn, d)
-                            
-
-            
+        pass
             
 Redis = Connector()
