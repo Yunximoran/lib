@@ -28,6 +28,7 @@ class Logger:
     # 日志管理器只在despose中使用吗？
     CWD = os.getcwd()
     def __init__(self, name, log_file='.log', level=level,*,
+                 log_path:Path=LOGDIR,
                  console=False,
                  max_bytes=10485760, 
                  backup_count=5):
@@ -38,24 +39,29 @@ class Logger:
         max_bytes: 单个日志文件最大字节数（默认10MB）
         backup_count: 保留的备份文件数量（默认5个）
         """
+        # 创建日志目录（如果不存在）
+        if not isinstance(log_path, Path):
+            log_path = Path(log_path)
+        log_path.mkdir(parents=True, exist_ok=True)
+        
+        # 创建日志文件 (如果文件不存在)
+        file_path = log_path.joinpath(log_file)
+        file_path.touch()
+        
+        # 初始化logger
         self.logger = logging.getLogger(name)
         self.logger.setLevel(level)
-        
-        # 创建日志目录（如果不存在）
-        log_path = LOGDIR.joinpath(log_file)
-        log_path.touch()
-
-
         
         # 创建日志格式器
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         
+        # 是否需要控制台输出
         if console:
             self.addconsole(formatter)
         
         # 创建滚动文件处理器
         file_handler = RotatingFileHandler(
-            log_path, 
+            file_path, 
             maxBytes=max_bytes, 
             backupCount=backup_count
         )
