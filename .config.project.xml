@@ -5,21 +5,6 @@
 			<level>info</level>
 		</logs>
 	</global>
-	<computer username="yunximoran" password="ranxi160259">
-		<name>DESKTOP-4UTP93R</name>
-		<os>Windows</os>
-		<version>11 professional</version>
-		<cpu>11th Gen Intel(R) Core(TM) i7-11800H @ 2.30GHz   2.30 GHz</cpu>
-		<gpu>nvidia rtx3050</gpu>
-		<ram>16</ram>
-		<disk items="#">
-			<li>C:</li>
-		</disk>
-	</computer>
-	<dependon items="#">
-		<li>redis-server ./databasetoo./conf/redis-service.conf</li>
-		<li>npm --prefix view run serve</li>
-	</dependon>
 	<server>
 		<app>core:app</app>
 		<host>127.0.0.1</host>
@@ -33,21 +18,21 @@
 		</cors>
 	</server>
 	<sock describe="通信配置">
-		<udp describe="配置组播组和广播地址">
-			<ip-broad>0.0.0.0</ip-broad>
+		<udp describe="配置组播组和广播域">
+			<ip-broad>192.168.31.255</ip-broad>
 			<ip-multi>224.25.25.1</ip-multi>
 		</udp>
 		<tcp describe="配置TCP性能参数">
 			<listenes>5</listenes>
 			<timeout>1</timeout>
 		</tcp>
-		<recv-size describe="设置接受字节">1024</recv-size>
+		<recv-size describe="设置接受字节">2048</recv-size>
 	</sock>
 	<ports describe="端口配置">
 		<udp>
 			<server>8081</server>
-			<broad describe="广播端口，心跳包传输">8082</broad>
-			<multi describe="组播端口，软件清单传输">8083</multi>
+			<broad describe="心跳包接收端口">8082</broad>
+			<multi describe="软件清单发送端口">8083</multi>
 			<client>8084</client>
 		</udp>
 		<tcp>

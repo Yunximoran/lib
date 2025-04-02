@@ -12,6 +12,15 @@ class _CatchProcess(__CatchBase):
         log_file="process.log",
         log_path=log_path
     )
+    
+    def pool(self):
+        def decorator(func):
+            @wraps(func)
+            def wrapper(target, *args, **kwargs):
+                pass
+            return wrapper
+        return decorator
+    
     def process(self, func):
         @wraps(func)
         def wrapper(target, *args, **kwargs):

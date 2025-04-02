@@ -41,7 +41,8 @@ class __CatchBase:
         def wrapper(*args, **kwargs):
             try:
                 self.record(func)
-                return func(*args, **kwargs)
+                _ = func(*args, **kwargs)
+                return _
             except TimeoutError:
                 self.record(func, "Timeout", 3)
                 return False

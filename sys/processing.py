@@ -11,11 +11,11 @@ from lib.init.resolver import __resolver
 from lib.catch import _CatchProcess
 
 
-Catch = _CatchProcess()
+catch = _CatchProcess()
 MINPROCESSES = __resolver("preformance", "min-processes") 
 MAXPROCESSES = __resolver("preformance", "max-processes")
 
-@Catch.process
+@catch.process
 def worker(target, *args, **kwargs):
     """
         包装工作函数
@@ -48,6 +48,7 @@ class Pool(_Pool):
         super().__init__(processes, initializer, initargs, maxtasksperchild, context)
         
     def map_async(self, func, iterable, *, attribute={}, chunksize = None, callback = None, error_callback = None):
+        # 包装工作函数， 添加多进程异常捕获， 设置特定情况下函数缺失属性
         _worker = partial(worker, func, attribute=attribute)
         return super().map_async(_worker, iterable, chunksize, callback, error_callback)
 
@@ -55,11 +56,9 @@ class Pool(_Pool):
         _worker = partial(worker, func, attribute=attribute)
         return super().apply_async(_worker, args, kwds, callback, error_callback)
 
+    @catch.process
     def join(self):
-        try:
-            return super().join()
-        except KeyboardInterrupt:
-            self.terminate()
+        return super().join()
 
     
 

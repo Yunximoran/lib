@@ -6,6 +6,7 @@ from xml.etree.ElementTree import Element, SubElement
 
 try:
     from ..exception import *
+    from ...strtool import pattern
 except ImportError:
     from lib.init.exception import *
 """
@@ -217,15 +218,15 @@ class Node(_Node):
         """
             对数据进行转换
         """
-        if re.match("^\d+$", context):
+        if re.match(pattern.INT, context):
             return int(context)
-        elif re.match("^[-+]?(\d*\.\d+)$", context):
+        elif re.match(pattern.FLOAT, context):
             return float(context)
-        elif re.match("^[(true)|(yes)|1]$", context):
+        elif re.match(pattern.IS_BOOL_TRUE, context):
             return True
-        elif re.match("^[(false)|(no)|0]$", context):
+        elif re.match(pattern.IS_BOOL_FALSE, context):
             return False
-        elif re.match("^[\t\n]+$", context):
+        elif re.match(pattern.IS_NONE, context):
             # 只有树节点self.data为空
             return None
         else:
@@ -557,4 +558,5 @@ if __name__ == "__main__":
     from lib import Resolver
     
     with Resolver() as resolver:
-        print(resolver.root.address)
+        sock = resolver("sock", 'udp', 'ip-broad')
+        print(sock)
