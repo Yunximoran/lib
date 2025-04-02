@@ -1,7 +1,7 @@
 from __future__ import annotations
 import re
 from pathlib import Path
-from typing import List, AnyStr, Any, Generator, Dict, Union
+from typing import List, AnyStr, Any, Generator, Dict, Union, TypeVar
 from xml.etree.ElementTree import Element, SubElement
 
 try:
@@ -11,7 +11,6 @@ except ImportError:
 """
     
 """
-
 class _Node:
     # 类操作
     def __init__(self, tag, node:Element, 
@@ -557,4 +556,5 @@ if __name__ == "__main__":
     from lib import Resolver
     
     with Resolver() as resolver:
-        print(resolver.root.address)
+        r = resolver.root
+        print(type(r))
