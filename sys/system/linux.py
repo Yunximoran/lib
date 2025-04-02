@@ -14,7 +14,7 @@ ROOTPASS = resolver("computer")["password"]
 class Linux(__BaseSystem):
     def __init__(self):
         super().__init__()
-        self._disks = ["/"]
+        self._disks = [Path("/")]
         
     # 用户权限
     def close(self):
@@ -26,7 +26,7 @@ class Linux(__BaseSystem):
         
     def start_software(self, path):
         path = self._path(path)
-        report = self.executor([path.name], cwd=path.parent)
+        report = self.executor([path.name], cwd=path.parent, iswait=False)
         return report
     
     def close_software(self, software):
@@ -78,23 +78,32 @@ class Linux(__BaseSystem):
     def move(self, topath, frompath):
         return self.executor(["mv", topath, frompath])
     
-    def build_hyperlink(self, alias, frompath):
-        topath = Path(LOCAL_DIR_SOFT).joinpath(alias)
+    def build_hyperlink(self, topath:Path, frompath:Path):
+        topath = self._path(topath)
+        frompath = self._path(frompath)
+        if not frompath.exists():
+            raise "source file is not exists"
+        
+        if topath.exists():
+            topath.unlink()
+            
+        topath = str(topath)# Path(LOCAL_DIR_SOFT).joinpath(alias)
+        frompath = str(frompath)
         report = self.executor(["ln", "-s", frompath, topath])
-        return topath, frompath, report
+        return topath, report
         
     def uproot(self, args:str) -> str:
-        if not re.match("^(sudo)(\s(-S))", args) \
-            and re.match("^(sudo)", args):
+        if not re.match(r"^(sudo)(\s(-S))", args) \
+            and re.match(r"^(sudo)", args):
             # -S， 读取标准输入密码
-            args = args.replace("sudo", "sudo -S")
+            args = args.replace(r"sudo", "sudo -S")
         else:
-            if not re.match("^(sudo)(\s(-S))", args):
+            if not re.match(r"^(sudo)(\s(-S))", args):
                 args = " ".join(map(str, ["sudo -S", args]))
         return args
 
 
-    def executor(self, args, isadmin=False, *, cwd=None) -> str:
+    def executor(self, args, isadmin=False, *, cwd=None, iswait=True) -> str:
         """
             args: 指令参数
             label: 软件名
@@ -112,7 +121,7 @@ class Linux(__BaseSystem):
         else:
             password = None
 
-        msg, err = super().executor(args, stdin=password, timeout=10)
+        msg, err = super().executor(args, cwd=cwd,stdin=password, timeout=10, iswait=iswait)
 
         if err:
             self.record(3, f"exec {args} results:\n{err}")

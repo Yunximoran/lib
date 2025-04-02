@@ -26,7 +26,7 @@ class Windows(__BaseSystem):
         bitmask = ctypes.cdll.kernel32.GetLogicalDrives()
         for letter in string.ascii_uppercase:
             if bitmask & 1:
-                drives.append(f"{letter}:\\")
+                drives.append(Path(f"{letter}:\\"))
             bitmask >>= 1
         return drives
     
@@ -43,7 +43,7 @@ class Windows(__BaseSystem):
     def start_software(self, path):
         # 读取本地软件清单
         path = self._path(path)
-        report = self.executor(["start", path.name], cwd=path.parent)
+        report = self.executor(["start", path.name], cwd=path.parent, iswait=False)
         return report
 
             
@@ -62,20 +62,28 @@ class Windows(__BaseSystem):
         return self.report(path.stem, f"{path} is killed", False)
 
     
-    def build_hyperlink(self, alias, frompath):
+    def build_hyperlink(self, topath:Path, frompath:Path):
         """
             建立软连接
         :param filename: 指定软件名称
         :param frompath: 本地软件地址
         """
+        topath = self._path(topath)
+        frompath = self._path(frompath)
+        if not frompath.exists():
+            raise "source file is not exists"
+    
+        if topath.exists():
+            topath.unlink()
+            
         # 创建软件映射地址
-        topath = os.path.join(LOCAL_DIR_SOFT, alias)
+        topath = str(topath)# os.path.join(LOCAL_DIR_SOFT, alias)
         frompath = str(frompath)
         # mlink 映射地址 实际地址
         report = self.executor(["mklink", topath, frompath], isadmin=True)
-        return topath, frompath, report
+        return topath, report
 
-    def executor(self, args, isadmin=False, *, cwd=None):
+    def executor(self, args, isadmin=False, *, cwd=None, iswait=True):
         """
             shell执行器
         args: 执行的shell指令
@@ -84,9 +92,9 @@ class Windows(__BaseSystem):
         _uproot()  if isadmin else None
         
         # 执行shell， 获取其输出信息和异常信息
-        msg, err =  super().executor(args, cwd=cwd)
+        msg, err =  super().executor(args, cwd=cwd, iswait=iswait)
         # 返回执行结果， 检查是否由于权限导致的错误，如果是，改用管理员运行
         self.record(1, f"exec {args} results:\n{msg}")
         return self.report(args, msg, err)\
-        if not re.match("权限", err)\
-        else self.executor(args, isadmin=True, cwd=cwd)
+        if not re.match("权限", str(err))\
+        else self.executor(args, isadmin=True, cwd=cwd, iswait=iswait)

@@ -102,7 +102,15 @@ class __BaseSystem:
         path: 文件目录
         base: 查找目录
         """
-        if path is not None:
+        if base is not None:
+            if not isinstance(base, Path):
+                base = Path(base)
+            if not base.exists():
+                raise "check dir is not exists"
+        else:
+            base = self._disks
+        
+        if path:
             # 如果不是Path转化为Path
             if not isinstance(path, Path):
                 path = Path(path)
@@ -111,13 +119,6 @@ class __BaseSystem:
                 return path
         else:
             results: List[Path] = []
-            if base is None:
-                # 默认全盘搜索
-                base = self._disks
-            elif base not in self._disks:
-                # 校验非法磁盘
-                raise "disk is not exist"
-            
             for disk in self._disks:
                 for root, dirs, files in os.walk(disk):
                     for file in files:
@@ -133,6 +134,7 @@ class __BaseSystem:
                  cwd:Path=None,
                  stdin: str=None,
                  timeout:int=None,
+                 iswait:bool=True
                  ):
         """
         :param label: PID标识
@@ -148,7 +150,14 @@ class __BaseSystem:
                 stderr=subprocess.PIPE,
                 cwd=cwd,
             )
-        msg, err = process.communicate(input=stdin, timeout=timeout)
+        if iswait:
+            msg, err = process.communicate(input=stdin, timeout=timeout)
+        else:
+            # time.sleep(0.5)
+            if process.poll() is None:
+                msg, err = True, False
+            else:
+                msg, err = False, True
         return msg, err
     
         

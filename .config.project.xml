@@ -1,6 +1,6 @@
 <root>
 	<global>
-		<encoding>UTF-8</encoding>
+		<encoding>utf-8</encoding>
 		<logs>
 			<level>info</level>
 		</logs>
