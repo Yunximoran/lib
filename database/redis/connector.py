@@ -1,9 +1,11 @@
 import os
 import json
+import re
 from typing import List
 from redis import StrictRedis
 
 from lib.init.resolver import __resolver
+from lib.strtool import pattern
 from lib.catch import _CatchDataBase
 
 catch = _CatchDataBase()
@@ -16,8 +18,7 @@ try:
     PASSWORD = __resolver("redis")["password"]
 except Exception:
     PASSWORD = None
-    
-    
+
 class Connector(StrictRedis):
     """
         Redis操作模块，只在redis服务启动后可用
@@ -49,11 +50,42 @@ class Connector(StrictRedis):
     
     
     @catch.redis
-    def dump(self, tbn, ft):
+    def dump(self,data):
+        """
+        
+        """
         pass
     
-    @catch.redis
-    def load(self):
-        pass
-            
-Redis = Connector()
+    def loads(self, data):
+        """
+            读取redis数据, 转化为PYTHON对象
+        """
+    
+        if isinstance(data, dict):
+            results = {}
+            for next in data:
+                next_data = self.loads(data[next])
+                results[next] = next_data
+            return results
+        if isinstance(data, list):
+            results = []
+            for next in data:
+                next_data = self.loads(next)
+                results.append(next_data)
+            return results
+        
+
+        
+        try:
+            data = json.loads(data)
+            return self.loads(data)
+        except Exception:
+            return data
+    
+
+Redis = Connector() 
+
+if __name__ == "__main__":
+    da = Redis.hgetall("classify")  
+    a = Redis.loads(da)
+    print(a)

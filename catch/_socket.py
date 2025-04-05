@@ -1,3 +1,4 @@
+import sys
 from socket import socket
 from socket import error as SockError
 from functools import wraps
@@ -12,30 +13,32 @@ class _CatchSock(__CatchBase):
         name="sock", 
         log_file="socket.log",
         log_path=log_path
-    )
-    socks = []
-    
+    )    
     def sock(self, func):
         @wraps(func)
-        def wrapper(sock:socket, *args, **kwargs):
+        def wrapper(*args, **kwargs):
             try:
-                sock.getpeername()
                 self.record(func)
+                return func(*args, **kwargs)
             except SockError as e:
                 self.record(func, e, 3)
                 return False
-            return func(*args, **kwargs)
+            except KeyboardInterrupt:
+                self.record(func, "rece interrupted", 3)
+                return False
+            except Exception:
+                pass
         return wrapper
-    
-    def checksockconning(self, func):
+        
+    def status(self, func):
         # 校验SOCK连接状态
         @wraps(func)
         def wrapper(sock:socket, *args, **kwargs):
             try:
-                sock.getpeername()
+                func(sock, *args, **kwargs)
                 self.record(func)
+                return True
             except SockError:
                 self.record(func, "连接错误", 3)
-                return "连接错误"
-            return func(sock, *args, **kwargs)
+                return False
         return wrapper

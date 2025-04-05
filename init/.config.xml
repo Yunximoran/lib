@@ -14,7 +14,7 @@
 				<li>accounts</li>
 			</datas>
 		</redis>
-		<mysql user="root" password="ranxi160259">
+		<mysql user="root" password="ranxi">
 			<host>localhost</host>
 			<port>3306</port>
 			<db>test</db>

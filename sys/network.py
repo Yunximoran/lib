@@ -3,13 +3,13 @@ import struct
 import platform
 
 
-class __NetWorkTools:
+class _NetWorkTools:
     @staticmethod
     def create_magic_packet(mac) -> bytes:
         """
             通过mac创建唤醒魔术包
         """
-        mac = __NetWorkTools.formatmac(mac)
+        mac = _NetWorkTools.formatmac(mac)
         data = b"FF" * 6 + (mac * 16).encode()
         res = b""
         for i in range(0, len(data), 2):
@@ -30,8 +30,7 @@ class __NetWorkTools:
         else:
             raise ValueError("incorrect mac format")
     
-
-class NetWork(__NetWorkTools):
+class NetWork(_NetWorkTools):
     def __init__(self, bind):
         # 绑定网卡
         self.__all_local_network = self.__checknet()
