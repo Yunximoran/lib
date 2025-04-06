@@ -1,5 +1,4 @@
 from functools import wraps
-from pymysql import err
 
 from ._catch import __CatchBase, Logger
 from ._catch import LOGSPATH, LIBPATH
@@ -45,7 +44,7 @@ class _CatchDataBase(__CatchBase):
             try:
                 self.record(func, f"execute success {args[-1]}", logger=self.mysql_logger)
                 return func(*args, **kwargs)
-            except err.OperationalError as e:
+            except Exception as e:
                 self.record(func, f"execute error {args[-1]}\n {e}", 3, logger=self.mysql_logger)
                 return False
         return wrapper
