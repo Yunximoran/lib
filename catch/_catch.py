@@ -1,8 +1,8 @@
 from pathlib import Path
 from functools import wraps
 
-from lib.manager._logger import Logger
-from lib.init.resolver import __resolver
+from ..manager._logger import Logger
+from ..init.resolver import __resolver
 
 LIBPATH = Path.cwd().joinpath("lib")
 LOGSPATH  = __resolver("default", "log-settings", "logs")
