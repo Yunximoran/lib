@@ -54,46 +54,6 @@ class __BaseSystem:
             path = Path(path)
         return path
     
-    def init(self):
-        pass
-    
-    # 硬件相关
-    def close(self):
-        # 关机
-        pass
-    
-    def restart(self):
-        # 重启
-        pass
-    
-    
-    # 软件相关
-    def start_software(self, path):
-        # 启动软件
-        pass
-    
-    def close_software(self, softname):
-        # 关闭软件
-        pass
-    
-    
-    # 文件相关
-    def compress(self, dir_path):
-        # 压缩
-        pass
-    
-    def uncompress(self, form, to):
-        # 解压
-        pass
-    
-    def wget(self, url, path=None):
-        # 下载
-        pass
-    
-    def remove(self, path):
-        # 移动文件或删除
-        pass
-            
     def checkfile(self, check_object, path=None, base=None):
         
         """
@@ -160,26 +120,6 @@ class __BaseSystem:
                 msg, err = False, True
         return msg, err
     
-        
-    def report(self, args, msg, err):
-        # 格式化报文
-        return json.dumps({
-            "status": "ok" if not err else "error",
-            "instruct": " ".join(args) if isinstance(args, Iterable) else args,
-            "msg": msg if msg else "<No output>",
-            "err": err if err else "<No error output>",
-            "time": time.time()
-        }, ensure_ascii=False, indent=4)   
-    
-    
-    def build_hyperlink(self, alias, frompath):
-        pass
-    
-    def uproot(self):
-        # 升级root权限
-        pass
-    
-    
     def format_params(self, typecode:int, data: dict|list) -> str:
         # 预定义表单类型
         types = [
@@ -193,6 +133,67 @@ class __BaseSystem:
             "cookie": time.time()
         }, ensure_ascii=False)     
 
+            
+    def report(self, args, msg, err):
+        # 格式化报文
+        return json.dumps({
+            "status": "ok" if not err else "error",
+            "instruct": " ".join(args) if isinstance(args, Iterable) else args,
+            "msg": msg if msg else "<No output>",
+            "err": err if err else "<No error output>",
+            "time": time.time()
+        }, ensure_ascii=False, indent=4)   
     
+        
+    def init(self):
+        pass
+    
+    # 硬件相关
+    def close(self):
+        # 关机
+        pass
+    
+    def restart(self):
+        # 重启
+        pass
+    
+    
+    # 软件相关
+    def start_software(self, path):
+        # 启动软件
+        pass
+    
+    def close_software(self, softname):
+        # 关闭软件
+        pass
+    
+    
+    # 文件相关
+    def compress(self, dir_path):
+        # 压缩
+        pass
+    
+    def uncompress(self, form, to):
+        # 解压
+        pass
+    
+    def wget(self, url, path=None):
+        # 下载
+        pass
+    
+    def remove(self, path):
+        # 移动文件或删除
+        pass
+            
+
+    def build_hyperlink(self, alias, frompath):
+        pass
+    
+    def uproot(self):
+        # 升级root权限
+        pass
+    
+    
+
     def record(self, level:int, msg):
         self.logger.record(level, msg)
