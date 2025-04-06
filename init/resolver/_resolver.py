@@ -76,7 +76,7 @@ class _Resolver:
     
     def __call__(self, *args, is_node=False) -> Node|PathNode|ItemsNode|AnyStr:
         node = self.root.search(*args)
-        if node is None:
+        if not node:
             setpath = " - ".join(args)
             raise NodeExistError(f"Setting not Exist: {setpath}")
         else:
