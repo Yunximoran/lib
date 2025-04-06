@@ -3,7 +3,7 @@ from .manager import Manager
 from .catch import *
 
 CatchSock = _CatchSock
-CatchDataBase = _CatchDataBase
+# CatchDataBase = _CatchDataBase
 CatchProcess = _CatchProcess
 
 

@@ -1,14 +1,41 @@
 import socket
 
+RECVSIZE = 1024
+ENCODING = "utf-8"
 
 class _ProtoType:
-    def __init__(self, address, listens):
+    def __init__(
+            self, address, *, 
+            listens:int|None=None,
+            timeout:float|None=None,
+            settings:list[tuple]=None
+        ):
+        
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.settings()
+        self.settings(settings)
         
         self.sock.bind(address)
-        self.sock.listen(listens)
-        
+        if listens:
+            self.sock.listen(listens)
+            
+        self.sock.settimeout(timeout)
+    def settings(self, settings):
+        for option in settings:
+            self.sock.setsockopt(*option)
+            
     
-    def settings(self):
-        pass
+    def send(self, data:str):
+        if not isinstance(data, bytes):
+            data = data.encode(ENCODING)
+        self.sock.sendall(data)
+    
+    def recv(self):
+        data = self.sock.recv(RECVSIZE)
+        return data.decode(ENCODING)    
+    
+    def accept(self):
+        return self.sock.accept()
+    
+    def close(self):
+        self.sock.close()
+    
