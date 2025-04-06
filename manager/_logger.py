@@ -1,21 +1,22 @@
+import re 
 import logging
-from logging.handlers import RotatingFileHandler
-import os
-import re
+
+from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler
 from pathlib import Path
+
 from ..init.resolver import __resolver
 
 levelnode = __resolver("default", "log-settings", "level", is_node=True)
 
-if re.match("^(0|d|(debug))$", levelnode.data.lower()):
+if re.match(r"^(0|d|(debug))$", levelnode.data.lower()):
     level = logging.INFO
-elif re.match("^(1|i|(info))$", levelnode.data.lower()):
+elif re.match(r"^(1|i|(info))$", levelnode.data.lower()):
     level = logging.INFO
-elif re.match("^(2|w|(warning))$", levelnode.data.lower()):
+elif re.match(r"^(2|w|(warning))$", levelnode.data.lower()):
     level = logging.WARNING
-elif re.match("^(3|e|(error))$", levelnode.data.lower()):
+elif re.match(r"^(3|e|(error))$", levelnode.data.lower()):
     level = logging.INFO
-elif re.match("^(4|c|(critical))$", levelnode.data.lower()):
+elif re.match(r"^(4|c|(critical))$", levelnode.data.lower()):
     level = logging.CRITICAL
 else:
     raise KeyError(f"Invalid log settings {levelnode.tag}: {levelnode.data}, address:{levelnode.addr}")
@@ -23,14 +24,13 @@ else:
 WROKDIR = Path.cwd()
 LOGDIR = WROKDIR.joinpath("logs")
 LOGDIR.mkdir(parents=True, exist_ok=True)
+ENCODING = __resolver("default", "encoding")
 
 class Logger:
     # 日志管理器只在despose中使用吗？
-    CWD = os.getcwd()
     def __init__(self, name, log_file='.log', level=level,*,
                  log_path:Path=LOGDIR,
                  console=False,
-                 max_bytes=10485760, 
                  backup_count=5):
         """
         name: 日志记录器名称（通常使用模块名__name__）
@@ -45,8 +45,8 @@ class Logger:
         log_path.mkdir(parents=True, exist_ok=True)
         
         # 创建日志文件 (如果文件不存在)
-        file_path = log_path.joinpath(log_file)
-        file_path.touch()
+        self.file_path = log_path.joinpath(log_file)
+        self.file_path.touch()
         
         # 初始化logger
         self.logger = logging.getLogger(name)
@@ -58,12 +58,14 @@ class Logger:
         # 是否需要控制台输出
         if console:
             self.addconsole(formatter)
-        
         # 创建滚动文件处理器
-        file_handler = RotatingFileHandler(
-            file_path, 
-            maxBytes=max_bytes, 
-            backupCount=backup_count
+        file_handler = TimedRotatingFileHandler(
+            self.file_path, 
+            when='D',
+            interval=1,
+            backupCount=backup_count,
+            encoding=ENCODING,
+            delay=True,
         )
         file_handler.setFormatter(formatter)
         self.logger.addHandler(file_handler)
@@ -119,6 +121,9 @@ class Logger:
     
     def __critical(self, message):
         self.logger.critical(message)
+        
+    def catch(self):
+        pass
 
 
 if __name__ == "__main__":
