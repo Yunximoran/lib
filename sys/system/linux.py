@@ -5,7 +5,8 @@ import tarfile
 from getpass import getpass
 from ._base import __BaseSystem
 from lib import Resolver
-from depend.path import *
+from pathlib import Path
+
 
 
 resolver = Resolver()
