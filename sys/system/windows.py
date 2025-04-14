@@ -5,9 +5,9 @@ import ctypes
 import string
 import re
 import zipfile, tarfile
+from pathlib import Path
 
 from ._base import __BaseSystem
-from depend.path import *
 
 
 
