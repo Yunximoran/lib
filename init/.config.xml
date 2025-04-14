@@ -10,8 +10,6 @@
 				<li>heart_packages</li>
 				<li>softwarelist</li>
 				<li>reports</li>
-				<li>waitdones</li>
-				<li>accounts</li>
 			</datas>
 		</redis>
 		<mysql user="root" password="ranxi">

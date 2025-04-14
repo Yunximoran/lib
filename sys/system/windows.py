@@ -4,9 +4,8 @@ import sys
 import ctypes
 import string
 import re
-
+from pathlib import Path
 from ._base import __BaseSystem
-from depend.path import *
 
 
 
