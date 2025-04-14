@@ -4,23 +4,11 @@
 			<host>localhost</host>
 			<port>6379</port>
 			<db>0</db>
-			<datas items="Redis数据表">
-				<li>client_status</li>
-				<li>client_message</li>
-				<li>heart_packages</li>
-				<li>softwarelist</li>
-				<li>reports</li>
-				<li>waitdones</li>
-				<li>accounts</li>
-			</datas>
 		</redis>
 		<mysql user="root" password="ranxi">
 			<host>localhost</host>
 			<port>3306</port>
 			<db>test</db>
-			<datas items="MySQL数据表">
-				<li>test</li>
-			</datas>
 		</mysql>
 	</database>
 	<preformance>

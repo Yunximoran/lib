@@ -7,7 +7,6 @@ import re
 import zipfile, tarfile
 
 from ._base import __BaseSystem
-from depend.path import *
 
 
 
