@@ -5,22 +5,12 @@
 			<level>info</level>
 		</logs>
 	</global>
-	<computer username="yunximoran" password="ranxi160259">
+	<computer username="yumo" password="ranxi160259">
 		<name>DESKTOP-4UTP93R</name>
 		<os>Windows</os>
 		<version>10.0.26100</version>
 		<machine>AMD64</machine>
-		<cpu>
-			<processor>Intel64 Family 6 Model 141 Stepping 1, GenuineIntel</processor>
-			<physical-cores>8</physical-cores>
-			<logical-cores>16</logical-cores>
-			<architecture>64bit</architecture>
-		</cpu>
-		<gpu>NVIDIA GeForce RTX 3050 Laptop GPU</gpu>
 		<ram>15.75</ram>
-		<disk total="#">
-			<li>C://</li>
-		</disk>
 	</computer>
 	<dependon>
 		<li>redis-server ./databasetoo./conf/redis-service.conf</li>
@@ -28,7 +18,7 @@
 	</dependon>
 	<sock>
 		<udp describe="UDP配置">
-			<ip-broad>192.168.31.255</ip-broad>
+			<ip-broad>255.255.255.255</ip-broad>
 			<ip-multi>224.25.25.1</ip-multi>
 		</udp>
 		<tcp>
@@ -51,7 +41,7 @@
 			<server>9095</server>
 		</tcp>
 	</ports>
-	<network>
+	<network name="WLAN">
 		<ip-server>192.168.31.176</ip-server>
 		<ip>192.168.31.176</ip>
 		<mac>20-1E-88-F5-05-B9</mac>

@@ -1,9 +1,28 @@
 import psutil
 import struct
 import platform
+import time
 
 
 class _NetWorkTools:
+    @staticmethod
+    def check_speed(interface, interval=1):
+        # 获取初始网络统计信息
+        stats_before = psutil.net_io_counters(pernic=True).get(interface)
+        bytes_before = stats_before.bytes_sent + stats_before.bytes_recv
+        
+        # 等待一段时间
+        time.sleep(interval)
+        
+        # 获取新的统计信息
+        stats_after = psutil.net_io_counters(pernic=True).get(interface)
+        bytes_after = stats_after.bytes_sent + stats_after.bytes_recv
+        
+        # 计算速率（字节/秒 → Mbps）
+        bytes_per_sec = (bytes_after - bytes_before) / interval
+        mbps = bytes_per_sec * 8 / (1024 ** 2)  # 1 byte = 8 bits, 1 Mbps = 1024^2 bits/s
+        return round(mbps, 3)
+    
     @staticmethod
     def create_magic_packet(mac) -> bytes:
         """
@@ -35,6 +54,7 @@ class NetWork(_NetWorkTools):
         # 绑定网卡
         self.__all_local_network = self.__checknet()
 
+        self.name = bind
         self.net = self.__all_local_network[bind]
         self.mac = self.net['mac']
         self.IPv4 = self.net["IPv4"]

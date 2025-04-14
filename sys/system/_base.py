@@ -10,6 +10,7 @@ import sys
 import ctypes
 import json
 import string
+import zipfile,tarfile
 from typing import List
 from pathlib import Path
 from collections.abc import Iterable
@@ -18,43 +19,67 @@ from typing import Tuple
 import psutil
 from typing import Generator
 from psutil import NoSuchProcess, AccessDenied
-from lib.manager import Logger
+
+from ...manager import Logger
+
+
+class Process:
+    def __init__(self, process:psutil.Process):
+        self.name = process.name().lower()
+        self.pid = process.pid
+        try:
+            self.exe = process.exe()
+        except (NoSuchProcess, AccessDenied):
+            self.exe = None
 
 class __BaseSystem:
     # 获取工作目录
-    CWDIR = os.getcwd()
-    # 运行文件
-
+    CWDIR = Path.cwd()
     _disks = []
     
     logger = Logger("system", "executor.log")
-
+    def __init__(self):
+        pass
+    
     def _check_soft_status(self, path, *, pid=None) -> List[psutil.Process]:
         # 遍历系统进程池
-        path = self._path(path) # str -> Path
+        path = self._path(path)
         processes = []
         for process in psutil.process_iter():
             # 匹配项目
             try:
                 curpath = Path(process.exe())
-                if re.match(path.stem, process.name().lower()):
+                item = Process(process)
+                if re.match(path.stem, item.name):
                     # 进程路径包含 软件名
-                    exe_depend_path = [parent.exe() for parent in process.parents()]
-                    exe_depend_path.append(process.exe())
+                    exe_depend_path = [Process(parent).exe for parent in process.parents()]
+                    exe_depend_path.append(item.exe)
                     if str(path) in exe_depend_path:
                         processes.append(process)
-                elif path.parent in curpath.parents:
+                        continue
+                if path.parent in curpath.parents:
+                    # 需要区别单文件可执行程序
                     processes.append(process)
+                    continue
             except psutil.AccessDenied:
+                # 权限异常
+                pass
+            except psutil.NoSuchProcess:
+                # 找不到进程
                 pass
         return processes
     
-    def _path(self, path:str|Path) -> Path:
+    def _path(self, path:str|Path, *,
+              check=False
+              ) -> Path: # 路径转换
         if isinstance(path, str):
             path = Path(path)
+            
+        if check and not path.exists():
+            raise FileExistsError(f"{path} is not exists")
         return path
     
-    def checkfile(self, check_object, path=None, base=None):
+    def checkfile(self, check_object, path=None, base=None):    # 查找文件
         
         """
             # 查找文件
@@ -90,7 +115,7 @@ class __BaseSystem:
             return results
     
                 
-    def executor(self, args, *,
+    def executor(self, args, *, # shell执行器
                  cwd:Path=None,
                  stdin: str=None,
                  timeout:int=None,
@@ -120,12 +145,18 @@ class __BaseSystem:
                 msg, err = False, True
         return msg, err
     
-    def format_params(self, typecode:int, data: dict|list) -> str:
-        # 预定义表单类型
+    def format_params(self, typecode:int, data: dict|list) -> str:  # 预定义表单类型
+        """
+        0: instruct,
+        1: software,
+        2: report,
+        3: download
+        """
         types = [
             "instruct",
             "software",
-            "report"
+            "report",
+            "download"
         ]
         return json.dumps({
             "type": types[typecode],
@@ -134,8 +165,7 @@ class __BaseSystem:
         }, ensure_ascii=False)     
 
             
-    def report(self, args, msg, err):
-        # 格式化报文
+    def report(self, args, msg, err):# 格式化报文
         return json.dumps({
             "status": "ok" if not err else "error",
             "instruct": " ".join(args) if isinstance(args, Iterable) else args,
@@ -149,33 +179,36 @@ class __BaseSystem:
         pass
     
     # 硬件相关
-    def close(self):
-        # 关机
+    def close(self):# 关机
         pass
     
-    def restart(self):
-        # 重启
+    def restart(self):# 重启
         pass
     
     
     # 软件相关
-    def start_software(self, path):
-        # 启动软件
+    def start_software(self, path): # 启动软件
         pass
     
-    def close_software(self, softname):
-        # 关闭软件
+    def close_software(self, softname): # 关闭软件
         pass
-    
     
     # 文件相关
-    def compress(self, dir_path):
+    def compress(self, topath, frompath, mode):
         # 压缩
         pass
     
-    def uncompress(self, form, to):
-        # 解压
-        pass
+    def uncompress(self, topath, frompath, suffix):
+        topath = self._path(topath, check=True)
+        frompath = self._path(frompath, check=True)
+        
+        if frompath.suffix not in suffix:
+            raise Exception(f"source must in {suffix}, actually gives: {frompath}")
+        
+        packname = frompath.name.split(".")[0] 
+        topath = topath.joinpath(packname)
+        topath.mkdir(exist_ok=True)
+        return topath, frompath
     
     def wget(self, url, path=None):
         # 下载
@@ -193,7 +226,5 @@ class __BaseSystem:
         # 升级root权限
         pass
     
-    
-
     def record(self, level:int, msg):
         self.logger.record(level, msg)
