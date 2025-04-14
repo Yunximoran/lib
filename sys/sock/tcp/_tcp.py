@@ -1,4 +1,6 @@
 import socket
+import json
+import time
 
 RECVSIZE = 1024
 ENCODING = "utf-8"
@@ -19,6 +21,15 @@ class _ProtoType:
             self.sock.listen(listens)
             
         self.sock.settimeout(timeout)
+        
+    
+    def cform(self, label, data): # 创建表单
+        return json.dumps({
+            "label": label,
+            "data":data,
+            "ctime": time.time()
+        }, ensure_ascii=False, indent=4).encode(ENCODING)
+    
     def settings(self, settings):
         for option in settings:
             self.sock.setsockopt(*option)
@@ -38,4 +49,10 @@ class _ProtoType:
     
     def close(self):
         self.sock.close()
+        
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, *_):
+        self.close()
     

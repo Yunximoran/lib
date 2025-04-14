@@ -1,7 +1,7 @@
-import subprocess
 import re
 import os
-import sys
+import zipfile
+import tarfile
 from getpass import getpass
 from ._base import __BaseSystem
 from lib import Resolver
@@ -21,12 +21,11 @@ class Linux(__BaseSystem):
         return self.executor(["sudo", "shutdown", "now"], isadmin=True)
     
     def restart(self):
-        os.system("sudo shutdown -r")
         return self.executor(["sudo", "shutdown", "-r"], isadmin=True)
         
     def start_software(self, path):
         path = self._path(path)
-        report = self.executor([path.name], cwd=path.parent, iswait=False)
+        report = self.executor(f"./{path.name}", cwd=path.parent, iswait=False)
         return report
     
     def close_software(self, software):
@@ -36,35 +35,51 @@ class Linux(__BaseSystem):
             process.kill()
 
     
-    def compress(self, ftype, f, t):
+    def compress(self, topath, frompath, mode=None):
         """
             压缩
         """
-        # 区分不同的tar指令 格式化默认参数
-        if ftype == "tar":
-            attr = "-cvf"
-        if ftype == "bz2":
-            attr = "-jcvf"
-        if ftype == "gz":
-            attr = "-zcvf"
-        self.executor(["tar", attr, f, t])
-    
-    def uncompress(self, pack, to):
+        topath = self._path(topath, check=True)
+        frompath = self._path(frompath, check=True)
+        
+        if not frompath.is_dir():
+            raise Exception(f"{frompath} must a dir")  
+        
+        if mode is not None:
+            if mode == "gz":
+                suffix = "gz"
+            elif mode == "bz2":
+                suffix = "bz"
+            elif mode == "xz":
+                suffix = "lxma"
+            else:
+                raise "模式错误"
+            mode = ":".join(("w", mode))
+            packname = ".".join((frompath.name, "tar", suffix))
+        else:
+            mode = "w"
+            packname = ".".join((frompath.name, "tar"))
+                
+        
+        topath = topath.joinpath(packname)
+        with tarfile.open(topath, mode=mode) as tar:
+            tar.add(frompath, arcname=frompath.parent)
+
+
+    def uncompress(self, topath, frompath, clear=False):
         """
             解压缩
         pack 文件地址
         to: 保存位置
         """
-        ftype = Path(pack).suffix
-        # ftype = pack.split(".")[-1]
-        if ftype == ".tar":
-            attr = "-xvf"
-        if ftype == ".bz2":
-            attr = "-jxvf"
-        if ftype == ".gz":
-            attr = "-zxvf"
-        # 统一使用tar指令执行解压缩
-        return self.executor(['tar', attr, pack, "-C", to])
+        topath, frompath = super().uncompress(topath, frompath, (r".tar", r".gz", r".bz", r".lxma"))
+        
+        with tarfile.open(frompath, "r:*") as tar:
+            tar.extractall(topath)
+
+        if clear:
+            frompath.unlink()
+        
     
     def wget(self, url, path=None):
         # 网络请求
@@ -87,7 +102,7 @@ class Linux(__BaseSystem):
         if topath.exists():
             topath.unlink()
             
-        topath = str(topath)# Path(LOCAL_DIR_SOFT).joinpath(alias)
+        topath = str(topath)
         frompath = str(frompath)
         report = self.executor(["ln", "-s", frompath, topath])
         return topath, report
@@ -128,5 +143,5 @@ class Linux(__BaseSystem):
         else:
             self.record(1, f"exec {args} results:\n{msg}")
         return  self.report(args, msg, err)\
-        if not re.match("[(权限)|(password)|(密码)]", err)\
+        if not re.match("[(权限)|(password)|(密码)]", f"{err}")\
         else self.executor(args, True)
