@@ -10,8 +10,6 @@ from pathlib import Path
 
 
 resolver = Resolver()
-ROOTPASS = resolver("computer")["password"]
-
 class Linux(__BaseSystem):
     def __init__(self):
         super().__init__()
