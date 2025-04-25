@@ -103,15 +103,3 @@ class Node(NODE):
             return f"node: {self.tag}"
         return f"option {self.tag} :\t{self.data}"
     
-    def __getitem__(self, key):
-        """
-            获取额外的属性数据
-        """
-        if key == "describe":
-            raise "describe is default attribute, plcess get it from the cls"
-        if key == "struct":
-            raise "struct is safe attribute, plcess get it for the cls"
-        return self.attrib[key]
-    
-    def __setitem__(self, key, val):
-        pass
