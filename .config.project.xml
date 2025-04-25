@@ -5,18 +5,12 @@
 			<level>info</level>
 		</logs>
 	</global>
-	<computer username="yumo" password="ranxi160259">
+	<computer>
 		<name>DESKTOP-4UTP93R</name>
 		<os>Windows</os>
 		<version>10.0.26100</version>
 		<machine>AMD64</machine>
 		<ram>15.75</ram>
-	<computer username="yumo" password="b'cmFueGk='">
-		<name>DESKTOP-CRFVISC</name>
-		<os>Windows</os>
-		<version>10.0.26100</version>
-		<machine>AMD64</machine>
-		<ram>31.75</ram>
 	</computer>
 	<dependon>
 		<li>redis-server ./databasetoo./conf/redis-service.conf</li>
@@ -57,9 +51,6 @@
 			<dir name="data">
 				<li>softwares.json</li>
 				<li>shells.json</li>
-				<li default="[]">softwares.json</li>
-				<li default="[]">shells.json</li>
-				<li default="{}">localfiles.json</li>
 			</dir>
 			<dir name="file">
 			</dir>
