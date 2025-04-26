@@ -60,13 +60,6 @@ class Node(NODE):
         else:
             # 否则报错目标Node不是当前Node的子元素
             raise ValueError("node not in childs")
-
-    
-    def setattrib(self, key, val):
-        return super()._setattrib(key, val)
-    
-    def delattrib(self, key):
-        return super()._delattrib(key)
     
     def _addchild(self, node):
         self.__childs.append(node)
@@ -91,7 +84,6 @@ class Node(NODE):
             return None
         else:
             return context 
-    
     
     def __str__(self) -> AnyStr:
         type = self.type()

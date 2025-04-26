@@ -1,12 +1,12 @@
 from functools import wraps
 
 from ._catch import __CatchBase, Logger
-from ._catch import LOGSPATH, LIBPATH
+from ._catch import LOGSPATH
 
 
 
 class _CatchProcess(__CatchBase):
-    log_path = LOGSPATH.bind(LIBPATH)
+    log_path = LOGSPATH.path
     logger = Logger(
         name="process",
         log_file="process.log",

@@ -1,12 +1,12 @@
 from functools import wraps
 
 from ._catch import __CatchBase, Logger
-from ._catch import LOGSPATH, LIBPATH
+from ._catch import LOGSPATH
 
 DBLOGS = LOGSPATH.search("db")
-
+print(DBLOGS)
 class _CatchDataBase(__CatchBase):
-    log_path = DBLOGS.bind(LIBPATH)
+    log_path = DBLOGS.path
     mysql_logger = Logger(
         name="mysql logs",
         log_file="mysql.log",

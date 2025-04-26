@@ -1,6 +1,7 @@
 from __future__ import annotations
 import base64, re
-from typing import List, Generator, Union
+from pathlib import Path
+from typing import List, Generator, Union, Any
 from xml.etree.ElementTree import Element, SubElement
 
 from .exception import *
@@ -30,7 +31,7 @@ class _Node:
             if re.fullmatch(pattern.ENCODE_BASE64, passwd[2:-1]):
                 self.password = base64.b64decode(passwd[2:-1]).decode()
             else:
-                self._setattrib("password", passwd)
+                self.setattrib("password", passwd)
         else: self.describe = None
         
     def getelement(self) -> Element:
@@ -51,55 +52,43 @@ class _Node:
         else:
             raise f"type node error, {self}"
         
-    def setdescribe(self, describe=None):
-        self.describe = describe
-        if describe:
-            self._setattrib("describe", describe)
-        
-    def deldescribe(self):
-        if self.describe:
-            self._delattrib("describe")
-        
     def search(self, *tags) -> NODE|PATHNODE|ITEMSNODE:
         # 创建指针，只想当前节点
         current = self
         for tag in tags:
             # 遍历标签， 逐级定位到指定节点
-            current = current._search(tag)
+            current = current.__search(tag)
             if current is None:
                 break
             # 如果为空，定位错误，返回None
         return current
-
-    def _search(self, tag) -> _Node:
-        if self.tag == tag:
-            return self
-                
-        if self.type() in ("tree", "struct"):
-            for next in self.__childs:
-                node = next._search(tag)
-                if node is not None:
-                    return node
-        return None
     
-    def _setattrib(self, key, val, elem:Element=None):
+    def setattrib(self, key, val, elem:Element=None):
         # 为当前元素设置属性，并同步Node属性
-        val = str(val)
+        if not isinstance(val, str):
+            val = str(val) 
         if key == "password":
             val = base64.b64encode(val.encode())
-            
         if elem is None: self.__node.set(key, str(val))
         else: elem.set(key, str(val))
 
-    def _delattrib(self, key, elem:Element=None):
+    def delattrib(self, key, elem:Element=None):
         # 删除当前元素的某个属性，并同步Node属性
         if key in self.__node.attrib.keys():
             if elem is None: del self.__node.attrib[key]
             else: del elem.attrib[key]
         else:
             raise KeyError(f"{self} not attribute {key}")
+
+    def setdescribe(self, describe=None):
+        self.describe = describe
+        if describe:
+            self.setattrib("describe", describe)
         
-    
+    def deldescribe(self):
+        if self.describe:
+            self.delattrib("describe")
+
     def _addelement(self, tag, text="\n", attrib:dict = {}, index:int=-1, **extra) -> NODE:
         # 创建新Element
         newelem = Element(tag)
@@ -110,12 +99,23 @@ class _Node:
 
         # 设置标签属性
         for option, val in attrib.items():
-            self._setattrib(option, val, newelem)
+            self.setattrib(option, val, newelem)
         return newelem
 
     def _delelement(self, node: NODE):
         self.__node.remove(node.getelement())
-        
+
+    def __search(self, tag) -> _Node:
+        if self.tag == tag:
+            return self
+                
+        if self.type() in ("tree", "struct"):
+            for next in self.__childs:
+                node = next.__search(tag)
+                if node is not None:
+                    return node
+        return None
+
     def __set_address(self):
         if self.parent:
             addr = self.parent.__set_address()
@@ -152,20 +152,44 @@ class _Node:
         return self.__attrib[key]
     
     def __setitem__(self, key, val):
-        self._setattrib(key, val)
+        self.setattrib(key, val)
 
     def __delitem__(self, key):
-        self._delattrib(key)
+        self.delattrib(key)
     
 
 class NODE(_Node):
-    pass
+    def setdata(self, data:Any): ...
+    def create(self, tag:str, text:str, attrib:dict, mode:str, **extra) -> NODE: ...
+    def delete(self, node:NODE): ...
+    def _addchild(self, node:Union[NODE, PATHNODE, ITEMSNODE]): ...
+    def _delchild(self, node:Union[NODE, PATHNODE, ITEMSNODE]): ...
 
 class PATHNODE(_Node):
-    pass
+    def bind(self, last: Path, *args): ...
+    def initstruct(self): ...
+    def clean(self): ...
+    def exist(self, iter:bool): ...
+    def resetfilename(self, old_fn:str, new_fn:str): ...
+    def resetdirname(self, name:str): ...
+    def touch(self, file:str, iter:bool, parents:bool): ...
+    def mkdir(self, iter:bool): ...
+    def rmdir(self): ...
+    def unlink(self): ...
+    def addfiles(self, filename:str, default:str, describe:str): ...
+    def addchild(self, dirname:str, describe:str): ...
+
+    def setattrib(self, val):
+        return super().setattrib("describe", val)
+    
+    def delattrib(self):
+        return super().delattrib("describe")
 
 class ITEMSNODE(_Node):
-    pass
+    def push(self, item, describe:bool): ...
+    def pop(self, item): ...
+
+
 
 __all__ = [
     "Element",

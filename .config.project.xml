@@ -49,8 +49,9 @@
 	<path>
 		<local struct="true">
 			<dir name="data">
-				<li>softwares.json</li>
-				<li>shells.json</li>
+				<li default="[]">softwares.json</li>
+				<li default="[]">shells.json</li>
+				<li default="{}">localfiles.json</li>
 			</dir>
 			<dir name="file">
 			</dir>

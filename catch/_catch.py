@@ -4,14 +4,13 @@ from functools import wraps
 from ..manager._logger import Logger
 from ..init.resolver import __resolver
 
-LIBPATH = Path.cwd().joinpath("lib")
-LOGSPATH  = __resolver("default", "log-settings", "logs")
+LOGSPATH  = __resolver("default", "log-settings", "path", "lib")
 
 class __CatchBase:
     logger = Logger(
         name="catch", 
         log_file="sys.log", 
-        log_path=LOGSPATH.bind(LIBPATH)
+        log_path=LOGSPATH.path
     )
     
     # 默认捕获器

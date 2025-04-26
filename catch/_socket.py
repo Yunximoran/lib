@@ -4,11 +4,11 @@ from socket import error as SockError
 from functools import wraps
 
 from ._catch import __CatchBase, Logger
-from ._catch import LOGSPATH, LIBPATH
+from ._catch import LOGSPATH
 
 
 class _CatchSock(__CatchBase):
-    log_path = LOGSPATH.bind(LIBPATH)
+    log_path = LOGSPATH.path
     logger = Logger(
         name="sock", 
         log_file="socket.log",
