@@ -27,7 +27,6 @@ class catch:
             return wrapper
         return decorator
     
-    # @staticmethod
     def timeout(self, func):
         @wraps(func)
         def wrapper(*args, **kwargs):
