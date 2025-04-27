@@ -2,23 +2,15 @@ from pathlib import Path
 from functools import wraps
 
 from .._logger import Logger
-from ...init.resolver import __resolver
-
-LOGSPATH  = __resolver("default", "log-settings", "path", "lib")
 
 class catch:
-    logger = Logger(
-        name="catch", 
-        log_file="sys.log", 
-        log_path=LOGSPATH.path
-    )
-    
+    def __init__(self, logger:Logger):
+        self.logger = logger
+
     # 默认捕获器
     def catch(self, *args, **kwargs):
         """
             额外的日志说明
-        log attr:
-            instruct: "sudo apt update"
         """
         def decorator(func):
             def wrapper(*args, **kwargs):
@@ -35,6 +27,7 @@ class catch:
             return wrapper
         return decorator
     
+    # @staticmethod
     def timeout(self, func):
         @wraps(func)
         def wrapper(*args, **kwargs):
