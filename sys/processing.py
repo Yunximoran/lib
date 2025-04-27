@@ -9,10 +9,7 @@ from multiprocessing import (
 )
 
 from lib.init.resolver import __resolver
-from lib.catch import _CatchProcess
-
-
-catch = _CatchProcess()
+from ._catch import Catch as catch
 MINPROCESSES = __resolver("preformance", "min-processes") 
 MAXPROCESSES = __resolver("preformance", "max-processes")
 
@@ -74,6 +71,7 @@ class Process(_Process):
     def run(self):
         return super().run()
     
+    @catch.process
     def join(self, timeout = None):
         try:
             return super().join(timeout) 

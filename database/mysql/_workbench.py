@@ -1,22 +1,14 @@
 
-try:
-    from .basic.connector import Connector
-    from .basic.information import Information
-    from .dispose.construction import Construction
-    from .dispose.formation import FormatPackage
-    from .dispose.check import Check
-    from ...catch import _CatchDataBase
-    
-except ImportError:
-    from lib.database.mysql.basic.connector import Connector
-    from lib.database.mysql.basic.information import Information
-    from lib.database.mysql.dispose.construction import Construction
-    from lib.database.mysql.dispose.formation import FormatPackage
-    from lib.database.mysql.dispose.check import Check
-    
-    from lib.catch import _CatchDataBase
 
-catch = _CatchDataBase()
+from .basic.connector import Connector
+from .basic.information import Information
+from .dispose.construction import Construction
+from .dispose.formation import FormatPackage
+from .dispose.check import Check
+from .__catch import Catch
+    
+
+catch = Catch
 
 class WorkBench(Connector):
     # 是否需要将代码更加基础化

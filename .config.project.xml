@@ -5,12 +5,12 @@
 			<level>info</level>
 		</logs>
 	</global>
-	<computer>
-		<name>DESKTOP-4UTP93R</name>
+	<computer username="root" password="b'cmFueGk='">
+		<name>DESKTOP-CRFVISC</name>
 		<os>Windows</os>
 		<version>10.0.26100</version>
 		<machine>AMD64</machine>
-		<ram>15.75</ram>
+		<ram>31.75</ram>
 	</computer>
 	<dependon>
 		<li>redis-server ./databasetoo./conf/redis-service.conf</li>
@@ -42,8 +42,8 @@
 		</tcp>
 	</ports>
 	<network name="WLAN">
-		<ip-server>192.168.31.176</ip-server>
-		<ip>192.168.31.176</ip>
+		<ip-server>192.168.11.121</ip-server>
+		<ip>192.168.11.121</ip>
 		<mac>20-1E-88-F5-05-B9</mac>
 	</network>
 	<path>
@@ -54,8 +54,6 @@
 				<li default="{}">localfiles.json</li>
 			</dir>
 			<dir name="file">
-			</dir>
-			<dir name="logs">
 			</dir>
 			<dir name="soft">
 			</dir>

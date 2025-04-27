@@ -5,10 +5,7 @@ from typing import List
 from redis import StrictRedis
 
 from lib.init.resolver import __resolver
-from lib.strtool import pattern
-from lib.catch import _CatchDataBase
-
-catch = _CatchDataBase()
+from .__catch import Catch
 
 
 REDISCONF = __resolver("redis")
@@ -31,11 +28,6 @@ class Connector(StrictRedis):
             password=PASSWORD, 
             db=DB, 
             decode_responses=True)
-        
-    @catch.ping
-    def status(self):
-        self.ping()
-    
     
     def lrange(self, key, start = 0, end=None) -> list:
         if end is None:
@@ -45,17 +37,10 @@ class Connector(StrictRedis):
     def save(self, **kwargs):
         return super().save(**kwargs)
         
-    @catch.redis
+    @Catch.ping
     def execute_command(self, *args, **options):
         return super().execute_command(*args, **options)
     
-    
-    @catch.redis
-    def dump(self,data):
-        """
-        
-        """
-        pass
     
     def loads(self, data):
         """

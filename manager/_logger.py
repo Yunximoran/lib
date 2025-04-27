@@ -8,6 +8,7 @@ from ..init.resolver import __resolver
 
 levelnode = __resolver("default", "log-settings", "level", is_node=True)
 
+#  读取默认日志级别
 if re.match(r"^(0|d|(debug))$", levelnode.data.lower()):
     level = logging.INFO
 elif re.match(r"^(1|i|(info))$", levelnode.data.lower()):
@@ -21,23 +22,37 @@ elif re.match(r"^(4|c|(critical))$", levelnode.data.lower()):
 else:
     raise KeyError(f"Invalid log settings {levelnode.tag}: {levelnode.data}, address:{levelnode.addr}")
 
-WROKDIR = Path.cwd()
-LOGDIR = WROKDIR.joinpath("logs")
+
+WROKDIR = Path.cwd()                            # 工作目录
+LOGDIR = WROKDIR.joinpath("logs")               # 输出目录
+ENCODING = __resolver("default", "encoding")    # 编码格式
+
+# 创建输出目录
 LOGDIR.mkdir(parents=True, exist_ok=True)
-ENCODING = __resolver("default", "encoding")
 
 class Logger:
     # 日志管理器只在despose中使用吗？
     def __init__(self, name, log_file='.log', level=level,*,
                  log_path:Path=LOGDIR,
+                 max_bytes=5*1024*1024,
+                 backup_count=5,
                  console=False,
-                 backup_count=5):
+                 ):
         """
-        name: 日志记录器名称（通常使用模块名__name__）
-        log_file: 日志文件名（默认app.log）
-        level: 日志级别（默认INFO）
-        max_bytes: 单个日志文件最大字节数（默认10MB）
-        backup_count: 保留的备份文件数量（默认5个）
+            # 日志管理
+
+        :param name: 日志记录器名称
+        :param log_file: 日志文件名
+        :param level: 日志级别
+        :param max_bytes: 单个日志文件最大字节数
+        :param backup_count: 保留的备份文件数量
+        :param console: 是否再控制台输出
+        :type name: str
+        :type log_file: str
+        :type level: int
+        :type max_bytes: int
+        :type backup_count: int
+        :type console: bool
         """
         # 创建日志目录（如果不存在）
         if not isinstance(log_path, Path):
@@ -59,26 +74,32 @@ class Logger:
         if console:
             self.addconsole(formatter)
         # 创建滚动文件处理器
-        file_handler = TimedRotatingFileHandler(
-            self.file_path, 
-            when='D',
-            interval=1,
-            backupCount=backup_count,
-            encoding=ENCODING,
-            delay=True,
-        )
-        file_handler.setFormatter(formatter)
-        self.logger.addHandler(file_handler)
+        self.rotating(formatter, max_bytes, backup_count)
     
     def addconsole(self, formatter):
         # 创建控制台处理器
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
         self.logger.addHandler(console_handler)
+
+    def rotating(self, formatter, maxbytes, backup):
+        file_handler = RotatingFileHandler(
+            self.file_path,
+            mode="a",
+            maxBytes=maxbytes,
+            backupCount=backup,
+            encoding=ENCODING,
+            delay=True
+        )
+        file_handler.setFormatter(formatter)
+        self.logger.addHandler(file_handler)
     
     def format_logtext(self, *msgs, **dmsgs):
         """
             格式化日志文本
+
+        :param *msgs:
+        :param **dmsgs:
         """
         logtext = []
         logtext.append("\t".join(msgs))
@@ -86,24 +107,31 @@ class Logger:
         for msg in dmsgs:
             item = f"{msg}: {dmsgs[msg]}"
             logtext.append(item)
-        
         return "\n".join(logtext)
     
-    def record(self, level:int , msg: str):
+    def record(self, level:int , *msgs, **kwmsgs):
         """
-            日志记录器：执行写入操作
+        日志记录器：执行写入操作
+
+        :param level: 记录等级
+        :param msg: 日志信息
+        :type level: int
+        :type msg: str
+
         log level: debug < info < waring < error < critical
         """
+        logtext = self.format_logtext(*msgs, **kwmsgs)
+
         if level == 0:
-            self.__debug(msg)
+            self.__debug(logtext)
         elif level == 1:
-            self.__info(msg)
+            self.__info(logtext)
         elif level == 2:
-            self.__warning(msg)
+            self.__warning(logtext)
         elif level == 3:
-            self.__error(msg)
+            self.__error(logtext)
         elif level == 4:
-            self.__critical(msg)
+            self.__critical(logtext)
         else:
             raise ValueError("must range 0, 4 the attribute level")
     
@@ -122,8 +150,6 @@ class Logger:
     def __critical(self, message):
         self.logger.critical(message)
         
-    def catch(self):
-        pass
 
 
 if __name__ == "__main__":
