@@ -1,11 +1,5 @@
 from .init.resolver import Resolver
-from .manager import Manager
-from .catch import *
-
-CatchSock = _CatchSock
-# CatchDataBase = _CatchDataBase
-CatchProcess = _CatchProcess
-
+from .manager import Managers
 
 
 """

@@ -11,6 +11,7 @@ from typing import (
 from ._node import *
 from .exception import PathExistsError, PathTypeError
 
+
 # 特殊节点处理
 class PathNode(PATHNODE):
     """
@@ -19,10 +20,8 @@ class PathNode(PATHNODE):
     从该节点开始解析目录结构
     dir标签表示：子目录 创建子节点
     li标签：表示子文件， 添加进self.files
-    
     # 提供关于路径的处理操作
     """
-
     def __init__(self, node: Element, parent:NODE|PATHNODE):
         """
         tag: 目录名称
@@ -36,11 +35,11 @@ class PathNode(PATHNODE):
         if isinstance(self.parent, NODE):
             self.tag = node.tag     # 目录名称
             self.describe = node.attrib['struct']   # 文件描述
-            self.path = Path(self.__set_path_status()) 
+            self.path = Path.cwd() / Path(self.__safelevel()) 
         else:
             self.tag = node.attrib["name"]  # 目录名称
             self.describe = node.attrib["describe"] if "describe" in node.attrib else None
-            self.path = parent.path.joinpath(self.__set_path_status())
+            self.path =parent.path.joinpath(self.__safelevel())
 
         self.dirs: List[PATHNODE] =[]
         for dir in node.findall("dir"):
@@ -48,8 +47,8 @@ class PathNode(PATHNODE):
             self.dirs.append(child)
         
         # 添加子文件, 保存子文件节点
-        self.files: Dict[AnyStr, Path] = {}
-        self.__files: Dict[AnyStr, Element] = {}
+        self.files: Dict[AnyStr, Path] = {}         # 文件子节点
+        self.__files: Dict[AnyStr, Element] = {}    # 文件原始文本
         for li in node.findall("li"):
             file_path = self.path.joinpath(li.text)
             self.files[file_path.name] = file_path 
@@ -61,15 +60,6 @@ class PathNode(PATHNODE):
             parent,
             self.dirs, 
             )
-        
-    def __set_path_status(self):
-        if self.status == "hidden":
-            return f".{self.tag}"
-        if self.status == "protect":
-            return f"_{self.tag}"
-        if self.status == "private":
-            return f"__{self.tag}"
-        return self.tag
     
     def bind(self, last:Path, *args):
         # 绑定实际路径
@@ -83,6 +73,12 @@ class PathNode(PATHNODE):
         if path.is_file():
             raise PathTypeError(f"{path} is not a dir")
         return path.joinpath(self.path)
+
+    def initstruct(self):
+        self.mkdir()
+        self.touch()
+        for dir in self:
+            dir.mkdir()
 
     def clean(self):
         glob = self.path.glob("*")
@@ -148,36 +144,24 @@ class PathNode(PATHNODE):
             raise "current node is not a PathNode"
         self.tag = name
         
-    def touch(self, file=None, *, iter=False, parents=False):
+    def touch(self, mode:int=438):
         """
             创建文件
         file: 要创建的文件
         iter: 是否遍历字节点
         """
-        if not file and not iter:
-            raise "please input file name or set iter is true"
-        if not parents and self.parent.exists():
-            raise "parent path not exist"
-        
-        if iter:
-            for child in self:
-                child.touch(iter=iter, parents=parents)
-                
-            for file in self.files.values():
-                file.touch(exist_ok=True)
-        else:
-            if file not in self.files:
-                raise "file not in self"
-            self.files[file].touch(parents=parents, exist_ok=True)
+        for file, elem in zip(self.files.values(), self.__files.values()):
+            file.touch(mode, True)
+            if "default" in elem.attrib:
+                default = elem.attrib["default"]
+                file.write_text(default)
     
-    def mkdir(self, iter=False):
+    def mkdir(self):
         """
             创建目录
         """
-        self.path.mkdir(exist_ok=True)
-        if iter:
-            for dir in self.dirs:
-                dir.mkdir(iter=iter)
+        self.path.mkdir(parents=True, exist_ok=True)
+
     
     def rmdir(self):
         """
@@ -185,17 +169,12 @@ class PathNode(PATHNODE):
         """
         self.path.rmdir()
         
-    def unlink(self, fn):
+    def unlink(self):
         """
             删除文件， 只能删除当前节点的内容， 要删除文件必须找到所在节点
         """
-        if fn not in self.__files:
-            KeyError(f"without this file, create it first: {fn}")
-        else:
-            node = self.getelement()
-            node.remove(self.__files[fn])
-            del self.__files[fn]
-            del self.files[fn]
+        for file in self.files.values():
+            file.unlink(True)
     
     
     def addfiles(self, filename, default=None, describe:str=None):
@@ -219,7 +198,6 @@ class PathNode(PATHNODE):
     def addchild(self, dirname:str, describe:str=None):
         if dirname in self:
             raise PathExistsError(f"the {dirname} directory is exists")
-        
         # 添加目录
         attrib = {
             "name": dirname
@@ -234,47 +212,18 @@ class PathNode(PATHNODE):
         dirnode = PathNode(dir, self)
         self.dirs.append(dirnode)
         
-        
-    def _addelement_back(self, tag, text, describe=None):
-        """
-            添加元素节点
-        PathNode中只能创建 li 和 dir 标签
-        根节点只会在 Node中被创建
-        """
-        if tag not in ["dir", "li"]:
-            raise "pathnode, must a dir or li"
-        print(text in self.dirs)
-        if text in self or text in self.files:
-            print(f"dir or file: {text}")
-            raise "dir or file is exist"
-        
-        # 设置节点描述
-        attrib = {}
-        if describe:
-            attrib["describe"] = describe
-        
-        # 创建目录节点
-        if tag == "dir":
-            attrib['name'] = text
-            return super()._addelement(tag, attrib=attrib, index=0)
-        
-        # 创建文件节点
-        if tag == "li" and not self.__check_filename(text):
-            raise "Invalid filename"
-        else:
-            return super()._addelement(tag, text, attrib=attrib)
-    
-    def _setattrib(self, describe):
-        # 设置文件描述
-        return super()._setattrib("describe", describe)
-    
-    def _delattrib(self):
-        # 删除文件描述
-        super()._delattrib("describe")
-    
     @staticmethod
     def __check_filename(text):
         return re.match(pattern.FILENAME, text)
+    
+    def __safelevel(self):
+        if self.status == "hidden":
+            return f".{self.tag}"
+        if self.status == "protect":
+            return f"_{self.tag}"
+        if self.status == "private":
+            return f"__{self.tag}"
+        return self.tag
     
     def __str__(self):
         return f"Path: {self.tag}"
@@ -285,6 +234,11 @@ class PathNode(PATHNODE):
         else:
             raise "there is no such file in directory"
         
+    def __setitem__(self, key, val):
+        self.setattrib(key, val)
 
+    def __delitem__(self, key):
+        self.delattrib(key)
+    
     def __len__(self):
         return len(self.dirs)

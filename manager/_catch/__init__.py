@@ -1,17 +1,16 @@
 from pathlib import Path
 from functools import wraps
 
-from ..manager._logger import Logger
-from ..init.resolver import __resolver
+from .._logger import Logger
+from ...init.resolver import __resolver
 
-LIBPATH = Path.cwd().joinpath("lib")
-LOGSPATH  = __resolver("default", "log-settings", "logs")
+LOGSPATH  = __resolver("default", "log-settings", "path", "lib")
 
-class __CatchBase:
+class catch:
     logger = Logger(
         name="catch", 
         log_file="sys.log", 
-        log_path=LOGSPATH.bind(LIBPATH)
+        log_path=LOGSPATH.path
     )
     
     # 默认捕获器
@@ -53,10 +52,6 @@ class __CatchBase:
             logger = self.logger
         logtext = logger.format_logtext(func.__name__, msg, module=func.__module__)
         logger.record(level, logtext)
-    
-    
-    def __close__(self):
-        for close in self.CLOSE:
-            close.close()
+
 
     
