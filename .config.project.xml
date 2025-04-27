@@ -27,7 +27,7 @@
 			<timeout>1</timeout>
 		</tcp>
 		<recv-size describe="设置接受字节">2048</recv-size>
-	</sock>""
+	</sock>
 	<ports describe="端口配置">
 		<udp>
 			<server>8081</server>
@@ -42,7 +42,7 @@
 		</tcp>
 	</ports>
 	<network describe="局域网IP和MAC">
-		<ip>192.168.11.121</ip>
+		<ip>192.168.31.176</ip>
 		<mac>20-1E-88-F5-05-B9</mac>
 	</network>
 	<path>
