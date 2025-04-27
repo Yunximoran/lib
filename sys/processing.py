@@ -51,12 +51,16 @@ class Pool(_Pool):
         return super().map_async(_worker, iterable, chunksize, callback, error_callback)
 
     def apply_async(self, func, args=(), kwds={}, *, attribute={}, callback=None, error_callback=None):
+        # 包装工作函数， 添加多进程异常捕获， 设置特定情况下函数缺失属性
         _worker = partial(worker, func, attribute=attribute)
         return super().apply_async(_worker, args, kwds, callback, error_callback)
 
-    @catch.process
     def join(self):
-        return super().join()
+        try:
+            super().join()
+        except KeyboardInterrupt:
+            self.terminate()
+            super().join()
 
     
 
@@ -65,15 +69,9 @@ class Process(_Process):
         super().__init__(group, name=name, args=args, kwargs=kwargs, daemon=daemon)
         self._target = partial(worker, target, attribute=attribute)
     
-    def start(self):
-        return super().start()
-    
-    def run(self):
-        return super().run()
-    
-    @catch.process
     def join(self, timeout = None):
         try:
-            return super().join(timeout) 
+            super().join(timeout) 
         except KeyboardInterrupt:
             self.terminate()
+            super().join(timeout)

@@ -33,15 +33,21 @@ class _ProtoType:
     def settings(self, settings):
         for option in settings:
             self.sock.setsockopt(*option)
-            
+
+    def sendwait(self, data, recvsize=RECVSIZE):
+        self.send(data)
+        return self.recv(recvsize)            
     
+    def sendfile(self, fp):
+        self.sock.sendfile(fp)
+
     def send(self, data:str):
         if not isinstance(data, bytes):
             data = data.encode(ENCODING)
         self.sock.sendall(data)
     
-    def recv(self):
-        data = self.sock.recv(RECVSIZE)
+    def recv(self, recvsize=RECVSIZE):
+        data = self.sock.recv(recvsize)
         return data.decode(ENCODING)    
     
     def accept(self):

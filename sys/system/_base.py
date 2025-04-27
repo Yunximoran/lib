@@ -32,12 +32,26 @@ class Process:
         except (NoSuchProcess, AccessDenied):
             self.exe = None
 
-class __BaseSystem:
+class Information:
+    # 本机信息
+    NODE = platform.node()
+    OS = platform.system()
+    VERSION = platform.version()
+    MACHINE = platform.machine()
+    RAM = psutil.virtual_memory().total / (1024 ** 3)
+
+    # CPU信息
+    PROCESSOR = platform.processor()
+    PHYSICALCORES = psutil.cpu_count(logical=False)
+    LOGICALCORES = psutil.cpu_count(logical=True)
+    ARCHITECTURE = platform.architecture()[0]
+
+class __BaseSystem(Information):
     # 获取工作目录
     CWDIR = Path.cwd()
-    _disks = []
-    
     logger = Logger("system", "executor.log")
+    _disks = []
+
     def __init__(self):
         pass
     
