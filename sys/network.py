@@ -3,17 +3,10 @@ import struct
 import platform
 import time
 
-net_if_addrs = psutil.net_if_addrs()
-net_if_stats = psutil.net_if_stats()
-
-# linux 和 window 获取 mac 的方法不一样
-if platform.system() == "Windows":
-    link = "AF_LINK"
-elif platform.system() == "Linux":
-    link = "AF_PACKET"
-
-
 class _NetWorkTools:
+
+    net_if_addrs = psutil.net_if_addrs()
+    net_if_stats = psutil.net_if_stats()
     @staticmethod
     def check_speed(interface, interval=1):
         # 获取初始网络统计信息
@@ -61,6 +54,11 @@ class _NetWorkTools:
     @staticmethod
     def checkallnet():
         results = {}
+        net_if_addrs = psutil.net_if_addrs()
+        if platform.system() == "Windows":
+            link = "AF_LINK"
+        elif platform.system() == "Linux":
+            link = "AF_PACKET"
         for interface_name, interface_addresses in net_if_addrs.items():
             net = {}
             for address in interface_addresses:
@@ -119,9 +117,17 @@ class NetWork(_NetWorkTools):
         """
             获取本地所有网卡配置
         """
+        net_if_stats = psutil.net_if_stats()
+        net_if_addrs = psutil.net_if_addrs()
         if bind not in net_if_addrs:
             raise Exception(f"not found net: {bind}")
         self.name = bind
+
+        if platform.system() == "Windows":
+            link = "AF_LINK"
+        elif platform.system() == "Linux":
+            link = "AF_PACKET"
+            
         for info in net_if_addrs[bind]:
             if info.family.name.startswith("AF_INET6"): self.IPv6 = info.address
             elif info.family.name.startswith("AF_INET"):

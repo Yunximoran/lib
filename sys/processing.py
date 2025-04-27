@@ -6,6 +6,7 @@ from multiprocessing import (
     Lock,
     Queue,
     Value,
+    Event
 )
 
 from lib.init.resolver import __resolver
