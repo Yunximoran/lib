@@ -2,14 +2,10 @@ import re
 import os
 import zipfile
 import tarfile
-from getpass import getpass
-from ._base import __BaseSystem
-from lib import Resolver
 from pathlib import Path
+from getpass import getpass
+from ._base import __BaseSystem, PASSWORD
 
-
-
-resolver = Resolver()
 class Linux(__BaseSystem):
     def __init__(self):
         super().__init__()
@@ -130,8 +126,7 @@ class Linux(__BaseSystem):
         if isadmin or re.match("^(sudo)", args):
             # 升级为管理员shell，并设置为从标准输入获取密码
             args = self.uproot(args)
-            print(args)
-            password = ROOTPASS
+            password = PASSWORD
         else:
             password = None
 

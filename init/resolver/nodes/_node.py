@@ -19,8 +19,7 @@ class _Node:
         
         self.__node = node
         self.__childs = childs
-        self.__attrib = node.attrib  
-        
+        self.__attrib = node.attrib
         
         self.__level = len(self.address) - 1
         if 'describe' in node.attrib:
@@ -32,6 +31,7 @@ class _Node:
                 self.password = base64.b64decode(passwd[2:-1]).decode()
             else:
                 self.setattrib("password", passwd)
+                self.password = passwd
         else: self.describe = None
         
     def getelement(self) -> Element:

@@ -21,8 +21,10 @@ from typing import Generator
 from psutil import NoSuchProcess, AccessDenied
 
 from ...manager import Logger
+from ...init.resolver import __resolver
 
 
+PASSWORD  = __resolver.root.password
 class Process:
     def __init__(self, process:psutil.Process):
         self.name = process.name().lower()
