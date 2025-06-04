@@ -1,189 +1,224 @@
-from ..basic._variable import SHOW, DROP, CREATE, INSERT, UPDATE, DELETE, SELECT
-from pymysql import err
-import copy
+from typing import Iterable
 
+from .constant import Fetch, Rows, Row
+from ._exception import ExeceedLimit
 
-class BASIC:
-    # 构筑SQL语句
-    # 通用操作
-    @staticmethod
-    def drop(ObjName, isDB=True, isExists=False):
-        """
-            构造DROP语句
-        :param ObjName: 对象名
-        :param isDB: 是否为数据库
-        :param isExists: 对象是否已存在
-        :return:
-        """
-        drop = copy.deepcopy(DROP)
-        if isDB:
-            drop += " database"
+class Construction:
+    def __init__(self):
+        self.basic = None
+
+    def __str__(self):
+        return self.basic
+    
+
+class Condition(Construction):
+    def __init__(self, left=None, right=None, link="and"):
+        self.commit = None
+        self.basic = f"Where {self.commit}"
+        if left or right:
+            if link == "and":
+                self.And(left, right)
+            elif link == "or":
+                self.Or(left, right)
+        
+
+    def And(self, left, right=None):
+        if isinstance(left, Condition):
+            left = left.commit if not left.commit else f"({left.commit})"
+            
+        if isinstance(right, Condition):
+            right = right.commit if not right.commit else f"({right.commit})"
+        elif right is None:
+            right = self.commit if not self.commit else f"{self.commit}"
+
+        if left and right:
+            self.commit = f"{left} and {right}"
         else:
-            drop += " table"
-        if isExists:
-            drop += " if exists"
-        return drop + " " + ObjName
+            if left:
+                self.commit = left
+            elif right:
+                self.commit = right
+            else:
+                raise ValueError("left and right must exist")
+            
+        self.basic = f"Where {self.commit}"
+        return f"{left} and {right}"
 
-    @staticmethod
-    def show(isDB=True):
-        """
-            构造SHOW语句
-        :param isDB: 是否为数据库
-        :return:
-        """
-        show = copy.deepcopy(SHOW)
-        if isDB:
-            return show + " " + "databases"
+    def Or(self, left, right=None):        
+        if isinstance(left, Condition):
+            left = left.commit if left.commit is None else f"({left.commit})"
+            
+        if isinstance(right, Condition):
+            if right.commit is None:
+                right = right.commit
+            else:
+                right = f"({right.commit})"
+        elif right is None:
+            right = f"{self.commit}"
+
+        if left and right:
+            self.commit = f"{left} or {right}"
         else:
-            return show + " " + "tables"
-
-
-
-class DBC:
-    # 库操作
-    @staticmethod
-    def ndb(dbn, isExists=False):
-        """
-            创建数据库
-        :param dbn: 数据库名
-        :param isExists: 数据库是否已存在
-        :return:
-        """
-        create = copy.deepcopy(CREATE)
-        create[0] += " database"
-        if isExists:
-            create[0] += " if not exists"
-
-        create = create[:1]
-        create.append(dbn)
-
-        return " ".join(create)
-
-    @staticmethod
-    def use(dbn):
-        return f"use {dbn}"
-
-
-class TBC:
-    # 表操作
-    @staticmethod
-    def create(tbn, targets, primary=None, unique=None):
-        """
-            构造CREATE语句
-            创建表
-        :param unique:  指定唯一键
-        :param primary: 指定主键
-        :param tbn:    表名
-        :type  tbn:    str
-        :param targets: 列
-        :type  targets: dict[str, str]
-        :return:
-        """
-        columns = []
-
-        for tag in targets.keys():
-            columns.append(tag + " " + targets[tag])
-
-        if primary is not None:
-            if primary not in targets.keys():
-                raise "primary must is targets key"
+            if left:
+                self.commit = left
+            elif right:
+                self.commit = right
             else:
-                columns.append(f"primary key({primary})")
+                raise ValueError("left and right must exist")
+            
+        self.basic = f"Where {self.commit}"
+        return f"{left} or {right}"
 
-        if unique is not None:
-            if unique not in targets.keys():
-                raise "unique must is targets key"
-            else:
-                columns.append(f"unique ({unique})")
+    def __str__(self):
+        return f"{self.basic} "
 
-        create = copy.deepcopy(CREATE)
-        create[0] += " table if not exists"
-        create.insert(1, tbn)
-        create.insert(-1, ','.join(columns))
-        return " ".join(create)
 
-    @staticmethod
-    def select(tbn, fondKey="*", condition=None):
+class Create(Construction):
+    def __init__(self, tbn:str, fetchs:tuple[Fetch], exists=True):
         """
-            构造SELECT语句
         :param tbn: 表名
-        :param fondKey: 指定查找键
-        :param condition: 设置条件
-        :return: SELECT SQL
+        :param fetchs: 表字段序列
         """
+        fetchs = [str(fetch) for fetch in fetchs]
+        if exists:
+            self.basic = "Create Table if not exists {} ({})".format(tbn, ", ".join(fetchs))
+        else:
+            self.basic = "Create Table {} ({})".format(tbn, ", ".join(fetchs))
 
-        select = copy.deepcopy(SELECT)
-        select.append(tbn)
-        if isinstance(fondKey, tuple):
-            keys = [key for key in fondKey]
-            fondKey = " ".join(keys)
-        elif not isinstance(fondKey, str):
-            # 如果fondKey 不合法要怎么办， 对于不合法的SQL应该在哪里进行异常处理
-            pass
-        select.insert(1, fondKey)
+
+class Select(Construction):
+    def __init__(self, tbn, find:Iterable[Fetch]=None, condition:Condition=None):
+        self.table = tbn
+
+        if find:
+            self.select = []
+            for fetch in find:
+                if isinstance(fetch, Fetch): self.select.append(fetch.name)
+                else: self.select.append(fetch)
+            self.select = ", ".join(self.select)
+        else:
+            self.select = "*"
+
         if condition:
-            return " ".join(select) + " where " + condition
-        return " ".join(select)
-
-    @staticmethod
-    def insert(tbn, vals, keys=None, ignore=False):
-        """
-            构造INSERT语句
-        :param tbn: 表名
-        :param vals: 需要插入的数据
-        :param keys: 是否为键值插入
-        :param ignore: 是否忽略重复数据
-        :return: INSERT SQL
-        """
-        insert = copy.deepcopy(INSERT)
-        insert.append(tbn)
-        if ignore:
-            insert.insert(1, "ignore")
-        # 数据格式增多后可能无法使用推导式构造sql语句，因为对于特殊的数据类型需要使用特殊格式格式化
-        value_format = "values(" + ", ".join([f"'{val}'" if isinstance(val, str) else f"{val}" for val in vals]) + ")"
-        if keys:
-            key_format = "(" + ", ".join(key for key in keys) + ")"
-            insert.append(key_format + value_format)
+            if not isinstance(condition, Condition): raise TypeError("The condition must a Condition")
+            self.basic = "Select {} From {} {}".format(self.select, self.table, condition)
+            self.condition = condition
         else:
-            insert.append(value_format)
-        return " ".join(insert)
+            self.basic = "Select {} From {}".format(self.select, self.table)
+            self.condition = Condition()
+    
+    def And(self, left, right=None):
+        self.condition.And(left, right)
+        self.basic = "Select {} From {} {}".format(self.select, self.table, self.condition)
+        return self.condition
 
-    @staticmethod
-    def update(tbn, vals, keys, condition):
-        """
-            构造UPDATE语句
-        :param tbn: 表名
-        :param vals: 更新数据
-        :param keys: 更新条目索引
-        :param condition: 设置更新条件
-        :return: UPDATE SQL
-        """
-        update = copy.deepcopy(UPDATE)
-        replace = []
-        for key, val in zip(keys, vals):
-            if isinstance(val, str):
-                val = f"'{val}'"
-            replace.append(f"{key} = {val}")
-        update[1] += " " + ", ".join(replace)
-
-        update.insert(1, tbn)
-        update.append(condition)
-        return " ".join(update)
-
-    @staticmethod
-    def delete(tbn, condition):
-        """
-            构造DELETE语句
-        :param tbn: 表名
-        :param condition: 指定条件
-        :return: DELETE SQL
-        """
-        delete = copy.deepcopy(DELETE)
-        delete.append(tbn)
-        delete.append("where " + condition)
-        return " ".join(delete)
+    def Or(self, left, right=None):
+        self.condition.Or(left, right)
+        self.basic = "Select {} From {} {}".format(self.select, self.table, self.condition)
+        return self.condition
 
 
-class Construction(BASIC, DBC, TBC):
-    # 构筑SQL语句
-    pass
+class Insert(Construction):
+    def __init__(self, tbn, vals:Rows|Row, keys=(), *, ignore=True):
+        if len(keys) and len(keys) != vals.length:
+            # 指定列时，每行的数量必须和指定列的数量一致
+            raise ExeceedLimit("keys length must be equal to row length")
+        
+        if not isinstance(vals, Rows|Row):
+            # 必须使用 Rows|Row 对数据进行包装
+            raise TypeError("vals must type of Rows or Row")
+        
+        # 构造键值SQL命令
+        commit_vals = self.commit_vals(vals)
+        commit_keys = self.commit_keys(keys)
+
+        # 设置忽略主键重复
+        if not ignore:ignore = " "
+        else:  ignore = " Ignore "
+
+        # 构造完整Insert命令
+        self.basic = "Insert{}Into {}{}Values {}".format(ignore, tbn, commit_keys, commit_vals)    
+    
+    def commit_vals(self, vals:Rows|Row):
+        # 多行插入和单行插入
+        if isinstance(vals, Row):
+            return "({})".format(", ".join(vals))
+        commit = ["({})".format(", ".join(val)) for val in vals]
+        return ", ".join(commit)
+
+    def commit_keys(self, keys:list[str|Fetch]):
+        # 指定列和不指定列
+        commit =  []
+        for key in keys:
+            if isinstance(key, Fetch):
+                commit.append(key.name)
+            elif isinstance(key, str): 
+                commit.append(key)
+            else: raise TypeError("key must type of Str or Fetch")
+
+        if not commit: return " "
+        else: return " ({}) ".format(", ".join(commit))
+
+
+class Update(Construction):
+    def __init__(self, tbn, condition:Condition=None, **datas):
+        if not datas:
+            raise ValueError("No Update Datas")
+        self.table = tbn
+        self.commit = []
+        for fetch, data in datas.items():
+            if not isinstance(data, str):
+                print(fetch, data)
+                data = str(data)
+            # else:
+            #     data = data
+            self.commit.append("{} = {}".format(fetch, data))
+
+        if condition:
+            if not isinstance(condition, Condition): raise TypeError("The condition must a Condition")
+            self.basic = "Update {} Set {} {}".format(self.table, ", ".join(self.commit), condition)
+            self.condition = condition
+        else:
+            self.basic = "Update {} Set {}".format(self.table, ", ".join(self.commit))
+            self.condition = Condition()
+
+    def And(self, left, right=None):
+        self.condition.And(left, right)
+        self.basic = "Update {} Set {} {}".format(self.table, ", ".join(self.commit), self.condition)
+        return self.condition
+
+    def Or(self, left, right=None):
+        self.condition.Or(left, right)
+        self.basic = "Update {} Set {} {}".format(self.table, ", ".join(self.commit), self.condition)
+        return self.condition
+
+
+class Delete(Construction):
+    def __init__(self, tbn, condition:Condition=None):
+        self.table = tbn
+        if condition:
+            if not isinstance(condition, Condition): raise TypeError("The condition must a Condition")
+            self.basic = "Delete From {} {}".format(self.table, condition)
+            self.condition = condition
+        else:
+            self.basic = "Delete From {}".format(self.table)
+            self.condition = Condition()
+
+    def And(self, left, right=None):
+        self.condition.And(left, right)
+        self.basic = "Delete From {} {}".format(self.table, self.condition)
+        return self.condition
+
+    def Or(self, left, right=None):
+        self.condition.Or(left, right)
+        self.basic = "Delete From {} {}".format(self.table, self.condition)
+        return self.condition
+
+__all__ = [
+    "Create",
+    "Select",
+    "Insert",
+    "Update",
+    "Delete",
+    "Condition"
+]
