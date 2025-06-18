@@ -17,7 +17,7 @@ try:
 except Exception:
     PASSWORD = None
 
-class Connector(StrictRedis):
+class Workbench(StrictRedis):
     """
         Redis操作模块，只在redis服务启动后可用
     """
@@ -69,7 +69,7 @@ class Connector(StrictRedis):
             return data
     
 
-Redis = Connector() 
+Redis = Workbench() 
 
 if __name__ == "__main__":
     da = Redis.hgetall("classify")  

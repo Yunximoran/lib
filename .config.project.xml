@@ -5,4 +5,7 @@
 			<level>info</level>
 		</logs>
 	</default>
+	<defaults>
+		<encoding>utf-8</encoding>
+	</defaults>
 </root>
