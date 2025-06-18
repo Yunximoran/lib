@@ -1,0 +1,19 @@
+# 枚举类型
+ENUM = None
+
+# 集合类型
+
+
+
+# JSON
+# 空间数据类型
+GEOMETRY = "GEOMETRY"
+POINT = "POINT"
+LINESTRING = "linestring"
+POLYGON = "POLYGON"
+
+MULTIPOINT = None
+MULTILINESTRING = None
+MULTIPOLYGON = None
+GEOMTRYCOLLECTION = None
+

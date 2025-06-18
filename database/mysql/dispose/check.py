@@ -1,27 +1,25 @@
-from ..basic.information import Information
+from typing import Iterable
 
 
 class Check:
-    info = Information()
-
     @staticmethod
-    def checkLen(items):
+    def checkLen(items: Iterable) -> bool:
         # 字典中可以获取到行数，数组中可以获取到列数
-        # print(items)
         # 检查预处理
+
         iNum = None
         for item in items:
-            if not isinstance(item, (list, tuple)) and iNum is None:
-                # 验证单次插入，iNum必须在初始化状态下进行
+            # 如果item不是可迭代对象，单条插入
+            if not isinstance(item, Iterable) and iNum is None:
                 return items
             lens = len(item)
-            if iNum is None:
-                iNum = lens
-            else:
-                if iNum != lens:
-                    return False
-                else:
-                    iNum = lens
+
+            # 记录第一行[列]长度
+            if iNum is None: iNum = lens; continue
+
+            # 如果有一行[列]长度不一致返回False
+            if iNum != lens: return False
+            else: iNum = lens
         return True
 
     @staticmethod
@@ -51,26 +49,11 @@ class Check:
                     return False
         return True
 
-    def checkKeyValNumEquality(self, db, tb, itemNum):
-        # 检验键值是否对应
-        # 也是只能校验格式化后的数据
-        _, keyNum = self.info.get_fetchs(db, tb)
-        print(keyNum)
-        return True if keyNum == itemNum else False
+    # def checkKeyValNumEquality(self, db, tb, itemNum):
+    #     # 检验键值是否对应
+    #     # 也是只能校验格式化后的数据
+    #     _, keyNum = self.info.get_fetchs(db, tb)
+    #     print(keyNum)
+    #     return True if keyNum == itemNum else False
 
-    def is_primary(self, db, tb, keyName):
-        # 检查是否是主键
-        res = self.info.primary(db, tb)
-        if keyName in res:
-            return True
-        else:
-            return False
-
-    def is_unique(self, db, tb, keyName):
-        # 检查是否是联合键
-        res = self.info.unique(db, tb)
-        if keyName in res:
-            return True
-        else:
-            return False
 
