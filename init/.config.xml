@@ -19,16 +19,14 @@
 	<default describe="工具库默认配置">
 		<log-settings describe="logger 默认配置">
 			<level>info</level>
-			<path>
-				<lib struct="模块日志文件" status="hidden" describe="内部日志保存路径">
-					<dir name="db" describe="数据库日志文件">
-						<li describe="Redis日志文件">redis.log</li>
-						<li describe="日志文件">mysql.log</li>
-					</dir>
-					<li describe="多进程日志文件">process.log</li>
-					<li describe="Sock日志文件">socket.log</li>
-				</lib>
-			</path>
+			<logs struct="日志目录" status="hidden" describe="内部日志保存路径">
+				<li describe="Redis日志文件">dbr.log</li>
+				<li describe="MySQL日志文件">dbmq.log</li>
+				<li describe="Mongo日志文件">dbmo.log</li>
+				<li describe="多进程日志文件">process.log</li>
+				<li describe="Sock日志文件">socket.log</li>
+				<li describe="运行日志">runing.log</li>
+			</logs>
 		</log-settings>
 		<encoding>utf-8</encoding>
 	</default>

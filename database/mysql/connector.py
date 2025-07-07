@@ -18,6 +18,7 @@ USEDB = CONF.search("db").data
 # MySQL user 和 passwd是必须的
 try: USER = CONF['user']
 except Exception: raise NoUser("error user")
+
 try:PASSWORD = CONF.password
 except Exception: raise NoPasswd("error passwd")
 

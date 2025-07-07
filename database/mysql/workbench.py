@@ -87,7 +87,6 @@ class WorkBench:
         :param tbn: 表名
         :param fetchs: 字段列表
         :param exists: 数据表存在时忽略异常
-
         """
         self.__conn.execute(Create(tbn, fetchs, exists))
         return self.workbook(tbn)
