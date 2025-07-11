@@ -1,12 +1,10 @@
 import platform
-
+from ._base import _BaseSystem
 from .windows import Windows
 from .linux import Linux
-from ._base import Information
 
 def System():
     OS = platform.system()
-
     if OS == "Windows":
         return Windows()
     elif OS == "Linux":

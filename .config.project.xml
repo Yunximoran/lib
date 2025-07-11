@@ -1,11 +1,42 @@
 <root>
-	<default>
-		<encoding>utf-8</encoding>
-		<logs>
+	<default describe="项目配置">
+		<log-settings describe="logger 默认配置">
 			<level>info</level>
-		</logs>
-	</default>
-	<defaults>
+			<path>logs</path>
+			<console>false</console>
+			<handler type="RotatingFileHandler">
+				<mode>a</mode>
+				<max-bytes>5242880</max-bytes>
+				<backup>5</backup>
+				<delay>true</delay>
+			</handler>
+		</log-settings>
 		<encoding>utf-8</encoding>
-	</defaults>
+	</default>
+	<services>
+		<django user="yumo" password="b'cmFueGk='" email="2970368069@qq.com">
+			<host>localhost</host>
+			<port>8000</port>
+			<reload>true</reload>
+			<model describe="django服务模块导入路径">services.django</model>
+			<extra-settings>
+				<MIDDLEWARE type="list" mode="a">corsheaders.middleware.CorsMiddleware</MIDDLEWARE>
+				<CORS_ALLOWED_ORIGINS items="跨域列表">
+					<li>http://localhost:8080</li>
+					<li>https://localhost:8080</li>
+				</CORS_ALLOWED_ORIGINS>
+			</extra-settings>
+			<extra-packages items="需要额外安装的包列表">
+				<li describe="跨域依赖包">django-cors-handers</li>
+			</extra-packages>
+		</django>
+		<vue>
+			<host>localhost</host>
+			<port>8080</port>
+			<cors items="跨域列表">
+				<li>http://localhost:8000</li>
+				<li>https://localhost:8000</li>
+			</cors>
+		</vue>
+	</services>
 </root>

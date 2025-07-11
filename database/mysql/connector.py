@@ -1,8 +1,10 @@
 from pymysql import Connect
 from pymysql.cursors import Cursor
 
-from .dispose._exception import NoUser, NoPasswd
-from ...init.resolver import __resolver
+from ..._init import _resolver
+from ..._catch import _Catch, _Logger
+from ..._catch import CatchMySQLEvent as catch_event
+from ..._catch._execption import NoUser, NoPasswd
 
 """
 WorkBench操作层
@@ -10,57 +12,54 @@ WorkBench操作层
 构造SQL语句
 """
 
-CONF = __resolver("mysql")
-HOST = CONF.search("host").data
-PORT = CONF.search("port").data
-USEDB = CONF.search("db").data
-
-# MySQL user 和 passwd是必须的
-try: USER = CONF['user']
-except Exception: raise NoUser("error user")
-
-try:PASSWORD = CONF.password
-except Exception: raise NoPasswd("error passwd")
-
 class Connector:
-    def __init__(self, usedb:str = None):
-        self.__conn = Connect(
-            host=HOST,
-            port=PORT,
-            user=USER,
-            password=PASSWORD,
+    logger = _Logger("dbmq")
+    catch = _Catch(logger)
+    _conf = _resolver("database", "mysql")
+    _host = _conf.search("host").data
+    _port = _conf.search("port").data
+    _usedb = _conf.search("db").data
+
+    try: _user = _conf['user']
+    except Exception: raise NoUser("never set mysql user")
+    try: _passwd = _conf.password
+    except Exception: raise NoPasswd("never set mysql passwd")
+
+    def __init__(self, *, host:str = _host, port: int = _port, user: str = _user, passwd: str = _passwd, usedb:str = _usedb):
+        self._conn: Connect = self._login_(host, port, user, passwd)
+        if usedb:
+            self._usedb = usedb
+        self._conn.select_db(self._usedb)
+        self._cursor = self._conn.cursor()
+        self.logger.record(1, "connect to mysql service, current: {}".format(self._usedb))
+
+    @catch.MySQL(catch_event.CONNECT)
+    def _login_(self, host:str = None, port: int = None, user: str = None, passwd: str = None):
+        return Connect(
+            host=host,
+            port=port,
+            user=user,
+            password=passwd,
             autocommit=True
         )
-        if usedb:
-            self.__usedb = usedb
-        else:
-            self.__usedb = USEDB
-        self.__conn.select_db(self.__usedb)
-        self.__cursor = self.__conn.cursor()
-
-    
+    @catch.MySQL(catch_event.EXECUTE)
     def execute(self, sql):
-        try:
-            self.__cursor.execute(str(sql))
-        except Exception as e:
-            print(f"Error: SQL:\n\t{sql}\n") 
-            self.__conn.rollback()
-            return False
-        return tuple([row if len(row) > 1 else row[0] for row in self.__cursor.fetchall()])
+        self._cursor.execute(str(sql))
+        return tuple([row if len(row) > 1 else row[0] for row in self._cursor.fetchall()])
     
     def getconn(self) -> Connect:
-        return self.__conn
+        return self._conn
     
     def getcurosr(self) -> Cursor:
-        return self.__cursor
+        return self._cursor
     
     def using(self):                                            # 查看当前正在使用的数据库
-        return self.__usedb
+        return self._usedb
     
     def results(self):
-        results = self.__cursor.fetchall()
+        results = self._cursor.fetchall()
         return tuple([row if len(row) > 1 else row[0] for row in results])
 
     def close(self):
-        self.__conn.close()
-        self.__cursor.close()
+        self._conn.close()
+        self._cursor.close()

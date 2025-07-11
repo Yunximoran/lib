@@ -61,7 +61,13 @@ class _Node:
             if current is None:
                 break
             # 如果为空，定位错误，返回None
-        return current
+        if isinstance(current, NODE):
+            return current
+        elif isinstance(current, PATHNODE):
+            return current
+        elif isinstance(current, ITEMSNODE):
+            return current
+        # return current
     
     def setattrib(self, key, val, elem:Element=None):
         # 为当前元素设置属性，并同步Node属性

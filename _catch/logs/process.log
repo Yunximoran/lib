@@ -1,0 +1,145 @@
+2025-07-10 06:31:52,928 - process - INFO - Process Task: work
+
+2025-07-10 06:31:52,939 - process - INFO - Process Task: work
+
+2025-07-10 06:31:52,940 - process - INFO - Process Task: work
+
+2025-07-10 06:32:43,558 - process - ERROR - Test Catch Process
+
+2025-07-10 06:32:43,569 - process - ERROR - Test Catch Process
+
+2025-07-10 06:32:43,573 - process - ERROR - Test Catch Process
+
+2025-07-10 06:33:32,076 - process - ERROR - Test Catch Process
+
+2025-07-10 06:33:32,085 - process - ERROR - Test Catch Process
+
+2025-07-10 06:33:32,086 - process - ERROR - Test Catch Process
+
+2025-07-10 06:35:14,553 - process - ERROR - Test Catch Process
+
+2025-07-10 06:35:14,558 - process - ERROR - Test Catch Process
+
+2025-07-10 06:35:14,560 - process - ERROR - Test Catch Process
+
+2025-07-10 06:35:29,382 - process - INFO - Process Task: work
+<class 'function'>
+2025-07-10 06:35:59,707 - process - INFO - Process Task: work
+__mp_main__
+2025-07-10 06:35:59,721 - process - INFO - Process Task: work
+__mp_main__
+2025-07-10 06:35:59,723 - process - INFO - Process Task: work
+__mp_main__
+2025-07-10 06:36:28,942 - process - INFO - Process Task: work
+['__new__', '__repr__', '__call__', '__get__', '__closure__', '__doc__', '__globals__', '__module__', '__builtins__', '__code__', '__defaults__', '__kwdefaults__', '__annotations__', '__dict__', '__name__', '__qualname__', '__type_params__', '__hash__', '__str__', '__getattribute__', '__setattr__', '__delattr__', '__lt__', '__le__', '__eq__', '__ne__', '__gt__', '__ge__', '__init__', '__reduce_ex__', '__reduce__', '__getstate__', '__subclasshook__', '__init_subclass__', '__format__', '__sizeof__', '__dir__', '__class__']
+2025-07-10 06:36:28,942 - process - INFO - Process Task: work
+['__new__', '__repr__', '__call__', '__get__', '__closure__', '__doc__', '__globals__', '__module__', '__builtins__', '__code__', '__defaults__', '__kwdefaults__', '__annotations__', '__dict__', '__name__', '__qualname__', '__type_params__', '__hash__', '__str__', '__getattribute__', '__setattr__', '__delattr__', '__lt__', '__le__', '__eq__', '__ne__', '__gt__', '__ge__', '__init__', '__reduce_ex__', '__reduce__', '__getstate__', '__subclasshook__', '__init_subclass__', '__format__', '__sizeof__', '__dir__', '__class__']
+2025-07-10 06:36:28,947 - process - INFO - Process Task: work
+['__new__', '__repr__', '__call__', '__get__', '__closure__', '__doc__', '__globals__', '__module__', '__builtins__', '__code__', '__defaults__', '__kwdefaults__', '__annotations__', '__dict__', '__name__', '__qualname__', '__type_params__', '__hash__', '__str__', '__getattribute__', '__setattr__', '__delattr__', '__lt__', '__le__', '__eq__', '__ne__', '__gt__', '__ge__', '__init__', '__reduce_ex__', '__reduce__', '__getstate__', '__subclasshook__', '__init_subclass__', '__format__', '__sizeof__', '__dir__', '__class__']
+2025-07-10 06:38:47,133 - process - INFO - Process Task: work
+d:\working\projects\yumo\yumo.py
+2025-07-10 06:38:47,142 - process - INFO - Process Task: work
+d:\working\projects\yumo\yumo.py
+2025-07-10 06:39:07,636 - process - INFO - Process Task: work
+
+task: d:\working\projects\yumo\yumo.py
+2025-07-10 06:39:07,639 - process - INFO - Process Task: work
+
+task: d:\working\projects\yumo\yumo.py
+2025-07-10 06:39:32,529 - process - INFO - Process Task: work
+task: d:\working\projects\yumo\yumo.py
+2025-07-10 06:39:32,539 - process - INFO - Process Task: work
+task: d:\working\projects\yumo\yumo.py
+2025-07-10 06:40:32,141 - process - INFO - Process Task: work
+task: d:\working\projects\yumo\yumo.py
+2025-07-10 06:40:32,147 - process - INFO - Process Task: work
+task: d:\working\projects\yumo\yumo.py
+2025-07-10 06:40:32,147 - process - INFO - Process Task: work
+task: d:\working\projects\yumo\yumo.py
+2025-07-10 06:42:21,553 - process - INFO - Process Task: work
+task: d:\working\projects\yumo\yumo.py
+
+2025-07-10 06:42:21,555 - process - INFO - Process Task: work
+task: d:\working\projects\yumo\yumo.py
+
+2025-07-10 06:42:21,556 - process - INFO - Process Task: work
+task: d:\working\projects\yumo\yumo.py
+
+2025-07-10 06:52:09,825 - process - INFO - Process Task: work, line: 32
+module: d:\working\projects\yumo\yumo.py
+
+2025-07-10 06:52:09,825 - process - INFO - Process Task: work, line: 32
+module: d:\working\projects\yumo\yumo.py
+
+2025-07-10 06:52:09,826 - process - INFO - Process Task: work, line: 32
+module: d:\working\projects\yumo\yumo.py
+
+2025-07-10 06:53:59,498 - process - INFO - Process Task: work, File "d:\working\projects\yumo\yumo.py"line 32
+module: d:\working\projects\yumo\yumo.py
+
+2025-07-10 06:53:59,500 - process - INFO - Process Task: work, File "d:\working\projects\yumo\yumo.py"line 32
+module: d:\working\projects\yumo\yumo.py
+
+2025-07-10 06:53:59,500 - process - INFO - Process Task: work, File "d:\working\projects\yumo\yumo.py"line 32
+module: d:\working\projects\yumo\yumo.py
+
+2025-07-10 06:54:53,387 - process - INFO - Process Task: work, File "d:\working\projects\yumo\yumo.py", line 32
+module: d:\working\projects\yumo\yumo.py
+
+2025-07-10 06:54:53,390 - process - INFO - Process Task: work, File "d:\working\projects\yumo\yumo.py", line 32
+module: d:\working\projects\yumo\yumo.py
+
+2025-07-10 06:54:53,390 - process - INFO - Process Task: work, File "d:\working\projects\yumo\yumo.py", line 32
+module: d:\working\projects\yumo\yumo.py
+
+2025-07-10 06:56:45,041 - process - INFO - Process Task: workFile "d:\working\projects\yumo\yumo.py", line 32
+
+2025-07-10 06:56:45,043 - process - INFO - Process Task: workFile "d:\working\projects\yumo\yumo.py", line 32
+
+2025-07-10 06:56:45,043 - process - INFO - Process Task: workFile "d:\working\projects\yumo\yumo.py", line 32
+
+2025-07-10 06:57:14,769 - process - INFO - Process Task: work
+File "d:\working\projects\yumo\yumo.py", line 32
+
+2025-07-10 06:57:14,770 - process - INFO - Process Task: work
+File "d:\working\projects\yumo\yumo.py", line 32
+
+2025-07-10 06:57:14,774 - process - INFO - Process Task: work
+File "d:\working\projects\yumo\yumo.py", line 32
+
+2025-07-10 06:58:45,000 - process - INFO - Process Task: work
+File "d:\working\projects\yumo\yumo.py", line 32
+t: TTTT
+
+2025-07-10 06:58:45,005 - process - INFO - Process Task: work
+File "d:\working\projects\yumo\yumo.py", line 32
+t: TTTT
+
+2025-07-10 06:58:45,008 - process - INFO - Process Task: work
+File "d:\working\projects\yumo\yumo.py", line 32
+t: TTTT
+
+2025-07-10 06:59:01,541 - process - INFO - Process Task: work
+
+t: TTTT
+
+2025-07-10 06:59:01,551 - process - INFO - Process Task: work
+
+t: TTTT
+
+2025-07-10 06:59:01,554 - process - INFO - Process Task: work
+
+t: TTTT
+
+2025-07-10 08:02:13,283 - process - INFO - Process Task: work
+File "d:\working\projects\yumo\yumo.py", line 14
+
+2025-07-10 08:02:13,284 - process - INFO - Process Task: work
+File "d:\working\projects\yumo\yumo.py", line 14
+
+2025-07-10 19:05:45,616 - process - INFO - Process Task: Django
+File "d:\working\projects\yumo\services\startup.py", line 17
+
+2025-07-10 19:05:45,702 - process - INFO - Process Task: Django
+File "d:\working\projects\yumo\services\startup.py", line 17
+

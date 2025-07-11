@@ -3,4 +3,4 @@ from .workbench import Condition
 from .workbench import Rows, Fetch
 from .dispose import constant
 
-from ...catch import Catch
+from ..._catch import _Catch

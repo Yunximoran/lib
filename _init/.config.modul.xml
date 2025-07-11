@@ -1,0 +1,36 @@
+	<default describe="工具库默认配置">
+		<log-settings describe="logger 默认配置">
+			<level>info</level>
+			<console>false</console>
+			<handler type="RotatingFileHandler">
+				<mode>a</mode>
+				<max-bytes>5242880</max-bytes>
+				<backup>5</backup>
+				<delay>true</delay>
+			</handler>
+            <!--
+			<handler type="FileHandler">
+				<mode>a</mode>
+				<delay>true</delay>
+			</handler>        
+
+			<handler type="RotatingFileHandler">
+				<mode>a</mode>
+				<max-bytes>5242880</max-bytes>
+				<backup>5</backup>
+				<delay>true</delay>
+			</handler>
+
+			<handler type="TimedRotatingFileHandler">
+				<when>h</when>
+                <interval>1</interval>
+				<backup>5</backup>
+				<delay>false</delay>
+                <utc>false</utc>
+			</handler>
+            -->
+
+
+		</log-settings>
+		<encoding>utf-8</encoding>
+	</default>

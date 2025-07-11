@@ -2,6 +2,7 @@ from __future__ import annotations
 
 
 from .connector import Connector
+from .connector import catch_event
 from .dispose import *
 from .dispose._exception import NoData, NoSelectDatabase
 
@@ -13,10 +14,10 @@ WorkBench操作层
 """
 class WorkBench:
     def __init__(self, usedb:str = None):
-        self.__conn = Connector(usedb)
+        self.__conn = Connector(usedb=usedb)
         self.check = Check()
         self.formation = Formation()
-    
+
     def using(self) -> str:
         """
             ### 查看当前数据库

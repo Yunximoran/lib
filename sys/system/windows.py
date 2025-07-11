@@ -8,7 +8,7 @@ import zipfile, tarfile
 from pathlib import Path
 
 from pathlib import Path
-from ._base import __BaseSystem
+from ._base import _BaseSystem
 
 
 
@@ -17,7 +17,7 @@ def _uproot():
         ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
         sys.exit()
         
-class Windows(__BaseSystem):
+class Windows(_BaseSystem):
     def __init__(self, *args):
         super().__init__(*args)
         self._disks = self.__getdisks()
@@ -33,8 +33,8 @@ class Windows(__BaseSystem):
         return drives
     
     def compress(self, topath, frompath, mode=None):
-        topath = self._path(topath, check=True) # 压缩到
-        frompath = self._path(frompath, check=True) # 压缩目标
+        topath = self._path_(topath, check=True) # 压缩到
+        frompath = self._path_(frompath, check=True) # 压缩目标
         
         if not frompath.is_dir():
             raise Exception(f"{frompath} must a dir")
@@ -67,7 +67,7 @@ class Windows(__BaseSystem):
     
     def start_software(self, path):
         # 读取本地软件清单
-        path = self._path(path)
+        path = self._path_(path)
         report = self.executor(["start", path.name], cwd=path.parent, iswait=False)
         return report
 
@@ -79,8 +79,8 @@ class Windows(__BaseSystem):
         
         """
         # 执行关闭软件命令
-        path = self._path(path)
-        processes = self._check_soft_status(path)
+        path = self._path_(path)
+        processes = self.check_soft_status(path)
         for process in processes:
             process.kill()
         
@@ -93,8 +93,8 @@ class Windows(__BaseSystem):
         :param filename: 指定软件名称
         :param frompath: 本地软件地址
         """
-        topath = self._path(topath)
-        frompath = self._path(frompath)
+        topath = self._path_(topath)
+        frompath = self._path_(frompath)
         if not frompath.exists():
             raise "source file is not exists"
     

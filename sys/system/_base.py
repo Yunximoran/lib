@@ -20,72 +20,81 @@ import psutil
 from typing import Generator
 from psutil import NoSuchProcess, AccessDenied
 
-from ...manager import Logger
+from ..._catch import _Catch, _Logger
+from ..._catch import CatchSystemEvent as catch_event
+from ..._init import _resolver
 
-
-class Process:
-    def __init__(self, process:psutil.Process):
-        self.name = process.name().lower()
-        self.pid = process.pid
-        try:
-            self.exe = process.exe()
-        except (NoSuchProcess, AccessDenied):
-            self.exe = None
-
-class Information:
-    # 本机信息
-    NODE = platform.node()
-    OS = platform.system()
-    VERSION = platform.version()
-    MACHINE = platform.machine()
-    RAM = psutil.virtual_memory().total / (1024 ** 3)
-
-    # CPU信息
-    PROCESSOR = platform.processor()
-    PHYSICALCORES = psutil.cpu_count(logical=False)
-    LOGICALCORES = psutil.cpu_count(logical=True)
-    ARCHITECTURE = platform.architecture()[0]
-
-class __BaseSystem(Information):
+class _BaseSystem:
     # 获取工作目录
-    CWDIR = Path.cwd()
-    logger = Logger("system", "executor.log")
+    logger = _Logger("system")
+    catch = _Catch(logger)
     _disks = []
 
+    _conf = _resolver("system")
+    Name = _conf.search("name").data
+    Version = _conf.search("version").data
+    Machine = _conf.search("machine").data
+    OS = _conf.search("OS").data
+    CPU = _conf.search("CPU").data
+    RAM = _conf.search("RAM").data
+    CWDIR = Path.cwd()
+
     def __init__(self):
-        pass
+        if int(self._conf["uuid"]) != uuid.getnode():
+            self._conf["uuid"] = uuid.getnode()
+            self._config_update_()
     
-    def _check_soft_status(self, path, *, pid=None) -> List[psutil.Process]:
-        # 遍历系统进程池
-        path = self._path(path)
+    def _config_update_(self):
+        self.logger.record(1, "update system infomation")
+        self._conf.search("name").setdata(platform.node())
+        self._conf.search("release").setdata(platform.release())
+        self._conf.search("version").setdata(platform.version())
+        self._conf.search("machine").setdata(platform.machine())
+        self._conf.search("OS").setdata(platform.system())
+        self._conf.search("CPU").setdata(platform.processor())
+
+        RAM = psutil.virtual_memory().total / (1024 ** 3)
+        self._conf.search("RAM").setdata(round(RAM, 2))
+        _resolver.save()
+        sys.exit(1)
+
+    # def _up_data_()
+    @catch.System(catch_event.PROCESS)
+    def _check_process_status_(self, path:Path, process:psutil.Process) -> List[psutil.Process]:
+        """
+            检查进程状态
+        """
+        current_process = Path(process.exe())
+        if re.match(path.stem, process.name()):
+            # 进程路径包含软件名
+            exe_depend_path = [parent_process.exe() for parent_process in process.parents()] # [Process(parent).exe for parent in process.parents()]
+            exe_depend_path.append(process)
+            if str(path) in exe_depend_path:
+                return process
+            else:
+                return None
+        if path.parent in current_process.parents:
+            # 需要区别单文件可执行程序
+            return process
+    
+        
+    def check_soft_status(self, path, *, pid=None) -> List[psutil.Process]:  # 遍历系统进程池
+        """
+        :param path: 检索目标进程路径
+        :param pid: 检索目标进程PID
+        """
+        path = self._path_(path)
         processes = []
         for process in psutil.process_iter():
             # 匹配项目
-            try:
-                curpath = Path(process.exe())
-                item = Process(process)
-                if re.match(path.stem, item.name):
-                    # 进程路径包含 软件名
-                    exe_depend_path = [Process(parent).exe for parent in process.parents()]
-                    exe_depend_path.append(item.exe)
-                    if str(path) in exe_depend_path:
-                        processes.append(process)
-                        continue
-                if path.parent in curpath.parents:
-                    # 需要区别单文件可执行程序
-                    processes.append(process)
-                    continue
-            except psutil.AccessDenied:
-                # 权限异常
-                pass
-            except psutil.NoSuchProcess:
-                # 找不到进程
-                pass
+            checked_process = self._check_process_status_(path, process)
+            if checked_process:
+                processes.append(checked_process)
         return processes
     
-    def _path(self, path:str|Path, *,
+    def _path_(self, path:str|Path, *,                                       # 路径转换
               check=False
-              ) -> Path: # 路径转换
+              ) -> Path:
         if isinstance(path, str):
             path = Path(path)
             
@@ -129,15 +138,25 @@ class __BaseSystem(Information):
             return results
     
                 
-    def executor(self, args, *, # shell执行器
+    def executor(self, args, *,                 # shell执行器
                  cwd:Path=None,
                  stdin: str=None,
                  timeout:int=None,
                  iswait:bool=True
                  ):
         """
-        :param label: PID标识
         :param args: 封装的shell指令列表
+        :param cwd: 指定工作目录
+        :param stdin: 设置输出流
+        :param timeout: 设置超时时间
+        :param iswait: 设置是否等待进程结束
+
+        :type args: tuple
+        :type cwd: path
+        :type stdin: str
+        :type timeout: int
+        :type iswait: bool
+
         :return report: 返回报文, 用于向服务端汇报执行结果
         """
         process= subprocess.Popen(
@@ -152,14 +171,13 @@ class __BaseSystem(Information):
         if iswait:
             msg, err = process.communicate(input=stdin, timeout=timeout)
         else:
-            # time.sleep(0.5)
             if process.poll() is None:
                 msg, err = True, False
             else:
                 msg, err = False, True
         return msg, err
     
-    def format_params(self, typecode:int, data: dict|list) -> str:  # 预定义表单类型
+    def formatparams(self, typecode:int, data: dict|list) -> str:  # 预定义表单类型
         """
         0: instruct,
         1: software,
@@ -178,13 +196,13 @@ class __BaseSystem(Information):
             "cookie": time.time()
         }, ensure_ascii=False)     
 
-            
-    def report(self, args, msg, err):# 格式化报文
+    @catch.JSON("execute report")
+    def report(self, args, msg, err): # 格式化报文
         return json.dumps({
             "status": "ok" if not err else "error",
-            "instruct": " ".join(args) if isinstance(args, Iterable) else args,
-            "msg": msg if msg else "<No output>",
-            "err": err if err else "<No error output>",
+            "instruct": " ".join([param if isinstance(param, str) else str(param) for param in args]) if isinstance(args, Iterable) else args,
+            "msg": str(msg) if msg else "<No output>",
+            "err": str(err) if err else "<No error output>",
             "time": time.time()
         }, ensure_ascii=False, indent=4)   
     
@@ -213,8 +231,8 @@ class __BaseSystem(Information):
         pass
     
     def uncompress(self, topath, frompath, suffix):
-        topath = self._path(topath, check=True)
-        frompath = self._path(frompath, check=True)
+        topath = self._path_(topath, check=True)
+        frompath = self._path_(frompath, check=True)
         
         if frompath.suffix not in suffix:
             raise Exception(f"source must in {suffix}, actually gives: {frompath}")
@@ -236,9 +254,24 @@ class __BaseSystem(Information):
     def build_hyperlink(self, alias, frompath):
         pass
     
-    def uproot(self):
+    def __uproot(self):
         # 升级root权限
         pass
     
     def record(self, level:int, msg):
         self.logger.record(level, msg)
+
+
+# class Information:
+#     # 本机信息
+#     NODE = platform.node()
+#     OS = platform.system()
+#     VERSION = platform.version()
+#     MACHINE = platform.machine()
+#     RAM = psutil.virtual_memory().total / (1024 ** 3)
+
+#     # CPU信息
+#     PROCESSOR = platform.processor()
+#     PHYSICALCORES = psutil.cpu_count(logical=False)
+#     LOGICALCORES = psutil.cpu_count(logical=True)
+#     ARCHITECTURE = platform.architecture()[0]

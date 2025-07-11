@@ -1,5 +1,5 @@
-from ._base import __BaseSystem
+from ._base import _BaseSystem
 
 
-class MacOS(__BaseSystem):
+class MacOS(_BaseSystem):
     pass

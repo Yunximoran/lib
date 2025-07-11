@@ -8,13 +8,12 @@ from .nodes import Node, PathNode, ItemsNode
 from .nodes.exception import *
     
 WORKDIR = Path.cwd()
-PRIVATECONF = WORKDIR.joinpath("lib", "init", ".config.xml")
+PRIVATECONF = WORKDIR.joinpath("lib", "_init", ".config.xml")
 PUBLICCONF = WORKDIR.joinpath("lib", ".config.project.xml")
-ENCODING = "utf-8"
 
 class _Resolver:
-    def __init__(self, file=PRIVATECONF):
-        self.__file = file
+    def __init__(self, file):
+        self.__file = file 
         self.__conf = et.parse(file)
         self.__root = self.__conf.getroot()
         self.root = self._deep(self.__root)
@@ -24,7 +23,7 @@ class _Resolver:
         # 设置缩进
         et.indent(self.__conf, space="\t", level=0)
         # 写入修改
-        self.__conf.write(self.__file, encoding=ENCODING)
+        self.__conf.write(self.__file, encoding="utf-8")
         
     def _deep(self, root: Element, parent: Node = None) -> Node|PathNode|ItemsNode:
         """
@@ -73,11 +72,3 @@ class _Resolver:
     
     def __exit__(self, *_):
         self.save()
-
-__all__ = [
-    "PRIVATECONF",
-    "PUBLICCONF",
-
-    "_Resolver"
-]
-    

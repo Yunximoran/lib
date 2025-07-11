@@ -4,29 +4,31 @@ import re
 from typing import List
 from redis import StrictRedis
 
-from lib.init.resolver import __resolver
-from .__catch import Catch
+from lib._init import _resolver
+from ..._catch import _Catch, _Logger
 
-
-REDISCONF = __resolver("redis")
-HOST = REDISCONF.search("host").data
-PORT = REDISCONF.search("port").data
-DB = REDISCONF.search("db").data
-try:
-    PASSWORD = REDISCONF.password
-except Exception:
-    PASSWORD = None
 
 class Workbench(StrictRedis):
     """
-        Redis操作模块，只在redis服务启动后可用
+        Redis操作模块, 只在redis服务启动后可用
     """
+    logger = _Logger("dbr")
+    catch = _Catch(logger)
+
+    _conf = _resolver("database", "redis")
+    _host = _conf.search("host").data
+    _port = _conf.search("port").data
+    _usedb = _conf.search("db").data
+
+    try: _passwd = _conf.password
+    except Exception: _passwd = None
+
     def __init__(self):
         super().__init__(
-            host=HOST,
-            port=PORT, 
-            password=PASSWORD, 
-            db=DB, 
+            host=self._host,
+            port=self._port, 
+            password=self._passwd, 
+            db=self._usedb, 
             decode_responses=True)
     
     def lrange(self, key, start = 0, end=None) -> list:
@@ -37,36 +39,37 @@ class Workbench(StrictRedis):
     def save(self, **kwargs):
         return super().save(**kwargs)
         
-    @Catch.ping
+    @catch.Redis()
     def execute_command(self, *args, **options):
         return super().execute_command(*args, **options)
     
-    
-    def loads(self, data):
+    def loads(self, data, *, log_ignore=False):
         """
             读取redis数据, 转化为PYTHON对象
         """
-    
+        if not log_ignore: self.logger.record(1, f"Parse Redis Data: {data}")
         if isinstance(data, dict):
             results = {}
             for next in data:
-                next_data = self.loads(data[next])
+                next_data = self.loads(data[next], log_ignore=True)
                 results[next] = next_data
             return results
+        
         if isinstance(data, list):
             results = []
             for next in data:
-                next_data = self.loads(next)
+                next_data = self.loads(next, log_ignore=True)
                 results.append(next_data)
             return results
         
+        json_data = self.__loads(data)
+        return self.loads(json_data, log_ignore=True) if json_data else data
 
-        
-        try:
-            data = json.loads(data)
-            return self.loads(data)
-        except Exception:
-            return data
+    @catch.JSON("Parse Reids Data", isclass=True, ignore=True)
+    def __loads(self, data):
+        data = json.loads(data)
+        return data
+
     
 
 Redis = Workbench() 

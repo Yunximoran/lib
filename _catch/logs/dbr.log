@@ -1,0 +1,114 @@
+2025-07-10 09:55:02,875 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 09:55:02,875 - dbr - INFO - Parse Redis Data: {'h': [1, 2, 3, 4, 5], 'a': {'c': 2, 'b': 'a'}}
+
+
+2025-07-10 09:55:02,875 - dbr - INFO - Parse Redis Data: [1, 2, 3, 4, 5]
+
+
+2025-07-10 09:55:02,875 - dbr - INFO - Parse Redis Data: 1
+
+
+2025-07-10 09:55:02,875 - dbr - INFO - Parse Redis Data: 2
+
+
+2025-07-10 09:55:02,875 - dbr - INFO - Parse Redis Data: 3
+
+
+2025-07-10 09:55:02,875 - dbr - INFO - Parse Redis Data: 4
+
+
+2025-07-10 09:55:02,875 - dbr - INFO - Parse Redis Data: 5
+
+
+2025-07-10 09:55:02,875 - dbr - INFO - Parse Redis Data: {'c': 2, 'b': 'a'}
+
+
+2025-07-10 09:55:02,875 - dbr - INFO - Parse Redis Data: 2
+
+
+2025-07-10 09:55:02,875 - dbr - INFO - Parse Redis Data: a
+
+
+2025-07-10 09:56:26,670 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 09:57:14,477 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 09:57:14,478 - dbr - INFO - Parse Redis Data: {"h": [1, 2, 3, 4, 5], "a": {"c": 2, "b": "a"}}
+
+
+2025-07-10 10:02:33,980 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 10:02:33,981 - dbr - INFO - Parse Redis Data: {"h": [1, 2, 3, 4, 5], "a": {"c": 2, "b": "a"}}
+
+
+2025-07-10 10:04:38,551 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 10:04:38,551 - dbr - INFO - Parse Redis Data: {"h": [1, 2, 3, 4, 5], "a": {"c": 2, "b": "a"}}
+
+
+2025-07-10 10:05:33,555 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 10:05:33,555 - dbr - INFO - Parse Redis Data: {"h": [1, 2, 3, 4, 5], "a": {"c": 2, "b": "a"}}
+
+
+2025-07-10 10:06:22,160 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 10:06:22,160 - dbr - INFO - Parse Redis Data: {"h": [1, 2, 3, 4, 5], "a": {"c": 2, "b": "a"}}
+
+
+2025-07-10 10:07:03,997 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 10:07:03,997 - dbr - INFO - Parse Redis Data: {"h": [1, 2, 3, 4, 5], "a": {"c": 2, "b": "a"}}
+
+
+2025-07-10 10:07:14,036 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 10:07:14,036 - dbr - INFO - Parse Redis Data: {"h": [1, 2, 3, 4, 5], "a": {"c": 2, "b": "a"}}
+
+
+2025-07-10 10:07:28,535 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 10:07:28,536 - dbr - INFO - Parse Redis Data: {"h": [1, 2, 3, 4, 5], "a": {"c": 2, "b": "a"}}
+
+
+2025-07-10 10:08:00,358 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 10:08:00,359 - dbr - INFO - Parse Redis Data: {"h": [1, 2, 3, 4, 5], "a": {"c": 2, "b": "a"}}
+
+
+2025-07-10 10:08:11,618 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 10:08:11,618 - dbr - INFO - Parse Redis Data: {"h": [1, 2, 3, 4, 5], "a": {"c": 2, "b": "a"}}
+
+
+2025-07-10 10:08:26,026 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 10:08:26,026 - dbr - INFO - Parse Redis Data: {"h": [1, 2, 3, 4, 5], "a": {"c": 2, "b": "a"}}
+
+
+2025-07-10 10:09:15,497 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 10:09:15,497 - dbr - INFO - Parse Redis Data: {"h": [1, 2, 3, 4, 5], "a": {"c": 2, "b": "a"}}
+
+
+2025-07-10 10:09:28,955 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET h1 h
+
+2025-07-10 10:09:28,955 - dbr - INFO - Parse Redis Data: {"h": [1, 2, 3, 4, 5], "a": {"c": 2, "b": "a"}}
+
+
