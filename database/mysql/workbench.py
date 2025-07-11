@@ -2,10 +2,8 @@ from __future__ import annotations
 
 
 from .connector import Connector
-from .connector import catch_event
 from .dispose import *
 from .dispose._exception import NoData, NoSelectDatabase
-
 
 """
 WorkBench操作层
@@ -125,19 +123,44 @@ class Table:
         self.__conn = conn
         self.check = check
         self.formation = formation
+        
+        self.fields = self.__load_field()
 
     def __str__(self):
         return self.__table
+    
 
-    def information(self):
+    def __load_field(self):
         results = self.__conn.execute(
             f"select column_name, data_type, column_key from information_schema.columns"
             f" where table_schema='{self.__conn.using()}' and table_name='{self.__table}'"
             f" order by ordinal_position"
         )
-        # print(results)
         if results:
             num = len(results)  # 列数量
+            for field, type, *attrib in results:
+                if type == "int":
+                    setattr(self, field, Field(field, Int, *attrib))
+                    continue
+                if type == "float":
+                    setattr(self, field, Field(field, Float, *attrib))
+                    continue
+                if type == "char":
+                    setattr(self, field, Field(field, Char, *attrib))
+                    continue
+                if type == "varchar":
+                    setattr(self, field, Field(field, VarChar, *attrib))
+                    continue
+                if type == "datetime":
+                    setattr(self, field, Field(field, DateTime, *attrib))
+                    continue
+                if type == "date":
+                    setattr(self, field, Field(field, Date, *attrib))
+                    continue
+                if type == "time":
+                    setattr(self, field, Field(field, Time, *attrib))
+                    continue
+    
             # 导出为字典数据
             results = {column_name: (data_type, column_type) for column_name, data_type, column_type in results}
             return results, num
@@ -156,7 +179,7 @@ class Table:
         """
             ### 查询主键
         """
-        columns:dict = self.information()[0]
+        columns:dict = self.__load_field()[0]
         # print(columns)
         for column in columns.keys():
             if columns[column][-1] == "PRI":
@@ -167,7 +190,7 @@ class Table:
         """
             ### 查询唯一键
         """
-        columns:dict = self.information()[0]
+        columns:dict = self.__load_field()[0]
         for column in columns.keys():
             if columns[column][-1] == "UNI":
                 return column
@@ -186,7 +209,7 @@ class Table:
         if isinstance(data, dict): vals, keys = self.formation.formatDict(data) # 格式化字典数据
         else: vals, keys = self.formation.formatSeries(data)                    # 格式化矩阵数据
         # 格式化方法返回，vals,keys两个变量
-        if keys is None and len(vals[0]) != self.information()[-1]: raise NoData("If there is no diameter key, you must insert all columns")
+        if keys is None and len(vals[0]) != self.__load_field()[-1]: raise NoData("If there is no diameter key, you must insert all columns")
         # Insert(self.__table, vals, keys, ignore=ignore)
 
         if vals: self.__conn.execute(Insert(self.__table, vals, keys, ignore=ignore))
@@ -214,7 +237,7 @@ class Table:
         else:
             vals, i = self.formation.formatSeries(newData)
             # 更新数据不是字典数据时，按顺序更新数据
-            keys = tuple(self.information()[0].keys())[: vals.length]
+            keys = tuple(self.__load_field()[0].keys())[: vals.length]
 
         # 校验数据
         if vals:

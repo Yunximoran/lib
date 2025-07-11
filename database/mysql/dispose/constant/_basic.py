@@ -96,7 +96,7 @@ class Rows:
     def __getitem__(self, index:int):
         return self.vals[index]
 
-class Fetch:
+class Field:
     def __init__(self, N:str, T:Typeof, *A):
         """
             ### 定义字段， 字段名, 字段类型, 字段属性|约束
@@ -107,9 +107,10 @@ class Fetch:
 
         """
         self.name = N
-        self.typeof = T
+        self.typeof = T 
         self.attrib = A
-        self.fetch = " ".join((N, str(T), *A))
+        self.field = " ".join((N, str(T), *A))
+    
 
     def __lt__(self, val):
         # 小于
@@ -141,10 +142,12 @@ class Fetch:
         return f"{self.name} in ({", ".join([str(item) for item in right])})"
     
     def __str__(self):
-        return self.fetch
+        return self.field
+    
+
 
 __all__ = [    
     "Row",
     "Rows",
-    "Fetch",
+    "Field",
 ]

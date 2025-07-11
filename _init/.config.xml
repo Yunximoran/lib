@@ -8,7 +8,7 @@
 		<mysql user="root" password="b'cmFueGk='">
 			<host>localhost</host>
 			<port>3306</port>
-			<db>sys</db>
+			<db>djangodata</db>
 		</mysql>
 	</database>
 	<preformance>
@@ -19,7 +19,7 @@
 	<default describe="工具库默认配置">
 		<log-settings describe="logger 默认配置">
 			<level>info</level>
-			<console>false</console>
+			<console>true</console>
 			<handler type="RotatingFileHandler">
 				<mode>a</mode>
 				<max-bytes>5242880</max-bytes>

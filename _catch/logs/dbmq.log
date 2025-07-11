@@ -56,3 +56,363 @@ host_summary	host_summary_by_file_io	host_summary_by_file_io_type	host_summary_b
 
 2025-07-10 06:20:42,786 - dbmq - INFO - show databases
 
+2025-07-11 13:56:30,139 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:57:17,373 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:57:19,120 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:57:34,134 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:57:37,929 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:57:46,727 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:57:50,545 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:57:52,343 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:58:07,689 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:58:25,563 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:58:30,363 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:58:35,155 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:58:40,919 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:58:42,708 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:58:44,492 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:58:46,271 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:58:53,044 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:58:54,810 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:59:10,431 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:59:15,230 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:59:19,022 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:59:20,774 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:59:22,562 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:59:47,481 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:59:50,312 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:59:55,096 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 13:59:56,853 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:00:08,706 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:00:11,497 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:00:15,294 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:00:24,154 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:00:26,930 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:00:35,747 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:00:37,627 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:00:46,450 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:00:49,227 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:00:59,066 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:01:05,862 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:01:15,719 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:01:18,479 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:01:23,244 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:01:35,067 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:33:31,723 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:33:38,014 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:33:44,775 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:34:30,888 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:34:30,889 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userata' order by ordinal_position
+
+
+2025-07-11 14:35:03,553 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:35:03,554 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userata' order by ordinal_position
+
+
+2025-07-11 14:35:25,092 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:35:25,094 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userata' order by ordinal_position
+
+
+2025-07-11 14:36:45,677 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:36:45,678 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-11 14:37:41,079 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:39:14,587 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:39:14,588 - dbmq - WARNING - (1054, "Unknown column 'u' in 'field list'")
+
+
+2025-07-11 14:39:14,589 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-11 14:39:42,413 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:39:42,414 - dbmq - INFO - Select uname From userdata
+
+
+2025-07-11 14:39:42,415 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-11 14:41:58,819 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:41:58,820 - dbmq - INFO - Select uname From userdata
+
+
+2025-07-11 14:41:58,822 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-11 14:42:22,469 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:42:58,521 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:42:58,522 - dbmq - INFO - Select uname From userdata Where usrid = 666 
+
+
+2025-07-11 14:42:58,523 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-11 14:43:04,163 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:43:04,164 - dbmq - INFO - Select uname From userdata Where usrid = 132 
+
+
+2025-07-11 14:43:04,166 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-11 14:45:00,108 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 14:45:00,111 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:04:25,573 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:04:25,576 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:07:46,627 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:07:46,629 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:09:05,179 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:09:05,181 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:09:56,613 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:10:18,426 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:11:06,620 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:11:06,622 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:11:48,578 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:11:48,580 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:12:26,576 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:12:26,578 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:12:45,422 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:12:45,424 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:13:14,869 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:13:14,870 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:14:57,533 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:14:57,535 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:16:34,217 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:16:34,220 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:17:03,907 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:17:03,908 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:17:03,910 - dbmq - INFO - Select uname From userdata Where usrid = 666 
+
+
+2025-07-11 15:17:25,999 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:17:26,000 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:17:26,001 - dbmq - INFO - Select uname From userdata Where usrid = 666 
+
+
+2025-07-11 15:17:36,548 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:17:36,549 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:17:36,550 - dbmq - INFO - Select uname From userdata Where usrid = 666 
+
+
+2025-07-11 15:26:53,661 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:26:53,663 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:26:53,663 - dbmq - INFO - Select uname From userdata Where usrid = 30 
+
+
+2025-07-11 15:29:26,370 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:29:26,372 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-11 15:29:26,373 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:29:26,374 - dbmq - WARNING - (1054, "Unknown column 'u' in 'field list'")
+
+
+2025-07-11 15:30:58,976 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:30:58,980 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-11 15:30:58,981 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:30:58,981 - dbmq - INFO - Select usrid From userdata
+
+
+2025-07-11 15:31:09,718 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:31:09,721 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-11 15:31:09,722 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-11 15:31:09,722 - dbmq - INFO - Select uname From userdata
+
+
+2025-07-11 15:31:38,999 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-11 15:31:39,002 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+

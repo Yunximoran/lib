@@ -112,3 +112,54 @@ HGET h1 h
 2025-07-10 10:09:28,955 - dbr - INFO - Parse Redis Data: {"h": [1, 2, 3, 4, 5], "a": {"c": 2, "b": "a"}}
 
 
+2025-07-11 13:19:32,006 - dbr - INFO - Parse Redis Data: None
+
+
+2025-07-11 14:20:08,896 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+INFO
+
+2025-07-11 14:23:02,651 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+INFO stats
+
+2025-07-11 14:25:15,704 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+INFO stats
+
+2025-07-11 14:25:35,083 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+INFO stats
+
+2025-07-11 14:25:59,143 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+INFO stats
+
+2025-07-11 14:26:18,718 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+INFO stats
+
+2025-07-11 14:26:42,430 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+INFO stats
+
+2025-07-11 14:27:02,126 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+INFO stats
+
+2025-07-11 14:27:40,754 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+INFO stats
+
+2025-07-11 15:29:26,371 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET userdata usrid
+
+2025-07-11 15:29:26,374 - dbr - INFO - Parse Redis Data: False
+
+
+2025-07-11 15:30:58,978 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET userdata usrid
+
+2025-07-11 15:30:58,981 - dbr - INFO - Parse Redis Data: (666,)
+
+
+2025-07-11 15:31:09,719 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET userdata uname
+
+2025-07-11 15:31:09,723 - dbr - INFO - Parse Redis Data: ('test',)
+
+
+2025-07-11 15:31:39,000 - dbr - INFO - Workbench<ConnectionPool<Connection<host=localhost,port=6379,db=0>>>
+HGET userdaa uname
+

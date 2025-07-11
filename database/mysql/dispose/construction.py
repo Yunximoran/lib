@@ -1,6 +1,6 @@
 from typing import Iterable
 
-from .constant import Fetch, Rows, Row
+from .constant import Field, Rows, Row
 from ._exception import ExeceedLimit
 
 class Construction:
@@ -74,7 +74,7 @@ class Condition(Construction):
 
 
 class Create(Construction):
-    def __init__(self, tbn:str, fetchs:tuple[Fetch], exists=True):
+    def __init__(self, tbn:str, fetchs:tuple[Field], exists=True):
         """
         :param tbn: 表名
         :param fetchs: 表字段序列
@@ -87,13 +87,13 @@ class Create(Construction):
 
 
 class Select(Construction):
-    def __init__(self, tbn, find:Iterable[Fetch]=None, condition:Condition=None):
+    def __init__(self, tbn, find:Iterable[Field]=None, condition:Condition=None):
         self.table = tbn
 
         if find:
             self.select = []
             for fetch in find:
-                if isinstance(fetch, Fetch): self.select.append(fetch.name)
+                if isinstance(fetch, Field): self.select.append(fetch.name)
                 else: self.select.append(fetch)
             self.select = ", ".join(self.select)
         else:
@@ -146,11 +146,11 @@ class Insert(Construction):
         commit = ["({})".format(", ".join(val)) for val in vals]
         return ", ".join(commit)
 
-    def commit_keys(self, keys:list[str|Fetch]):
+    def commit_keys(self, keys:list[str|Field]):
         # 指定列和不指定列
         commit =  []
         for key in keys:
-            if isinstance(key, Fetch):
+            if isinstance(key, Field):
                 commit.append(key.name)
             elif isinstance(key, str): 
                 commit.append(key)

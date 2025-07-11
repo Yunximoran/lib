@@ -69,6 +69,7 @@ class _Catch:
                         return False
                 return wrapper
             return decorator
+        
         if type == CatchMySQLEvent.EXECUTE:      
             def decorator(func):
                 @wraps(func)
@@ -83,6 +84,10 @@ class _Catch:
                         return False
                     except ProgrammingError as e:
                         self.logger.record(3, e)
+                        return False
+                    except OperationalError as e:
+                        self.logger.record(2, e)
+                        return False
                 return wrapper
             return decorator
     
