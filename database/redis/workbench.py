@@ -23,14 +23,28 @@ class Workbench(StrictRedis):
     try: _passwd = _conf.password
     except Exception: _passwd = None
 
-    def __init__(self):
+    def __init__(self, *,
+                connect=True, 
+                timeout=True, 
+                data=True, 
+                watch=True, 
+                response=True, 
+                readonly=True,        
+                ):
         super().__init__(
             host=self._host,
             port=self._port, 
             password=self._passwd, 
             db=self._usedb, 
             decode_responses=True)
-    
+        
+        self.catch.CATCH_REDIS_CONNECT = connect
+        self.catch.CATCH_REDIS_TIMEOUT = timeout
+        self.catch.CATCH_REDIS_DATA = data
+        self.catch.CATCH_REDIS_WATCH = watch
+        self.catch.CATCH_REDIS_RESPONSE = response
+        self.catch.CATCH_REDIS_READONLY = readonly
+
     def lrange(self, key, start = 0, end=None) -> list:
         if end is None:
             end = self.llen(key)

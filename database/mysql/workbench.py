@@ -91,7 +91,7 @@ class WorkBench:
         return self.workbook(tbn)
 
     def delete(self, tbn, exists=False):                                  # 删除数据表
-        self.__conn.execute("Drop DataBase{}{}".format(" if not exists " if exists else " ", tbn)) 
+        self.__conn.execute("Drop table {}{}".format(" if not exists " if exists else " ", tbn)) 
     
     def __enter__(self):
         return self
@@ -137,7 +137,6 @@ class Table:
             f" order by ordinal_position"
         )
         if results:
-            num = len(results)  # 列数量
             for field, type, *attrib in results:
                 if type == "int":
                     setattr(self, field, Field(field, Int, *attrib))
@@ -163,7 +162,7 @@ class Table:
     
             # 导出为字典数据
             results = {column_name: (data_type, column_type) for column_name, data_type, column_type in results}
-            return results, num
+            return results
         else: return None
     
     def count(self):
@@ -179,7 +178,7 @@ class Table:
         """
             ### 查询主键
         """
-        columns:dict = self.__load_field()[0]
+        columns:dict = self.fields
         # print(columns)
         for column in columns.keys():
             if columns[column][-1] == "PRI":
@@ -190,7 +189,7 @@ class Table:
         """
             ### 查询唯一键
         """
-        columns:dict = self.__load_field()[0]
+        columns:dict = self.fields
         for column in columns.keys():
             if columns[column][-1] == "UNI":
                 return column
@@ -209,7 +208,8 @@ class Table:
         if isinstance(data, dict): vals, keys = self.formation.formatDict(data) # 格式化字典数据
         else: vals, keys = self.formation.formatSeries(data)                    # 格式化矩阵数据
         # 格式化方法返回，vals,keys两个变量
-        if keys is None and len(vals[0]) != self.__load_field()[-1]: raise NoData("If there is no diameter key, you must insert all columns")
+        
+        if keys is None and len(vals[0]) != len(self.fields): raise NoData("If there is no diameter key, you must insert all columns")
         # Insert(self.__table, vals, keys, ignore=ignore)
 
         if vals: self.__conn.execute(Insert(self.__table, vals, keys, ignore=ignore))
@@ -235,9 +235,9 @@ class Table:
         if isinstance(newData, dict): 
             vals, keys = self.formation.formatDict(newData)
         else:
-            vals, i = self.formation.formatSeries(newData)
+            vals, _ = self.formation.formatSeries(newData)
             # 更新数据不是字典数据时，按顺序更新数据
-            keys = tuple(self.__load_field()[0].keys())[: vals.length]
+            keys = tuple(self.fields.keys())[: vals.length]
 
         # 校验数据
         if vals:

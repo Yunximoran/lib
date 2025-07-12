@@ -1,4 +1,5 @@
 import re, logging, inspect
+from typing import Callable
 from functools import wraps
 
 from ._execption import *
@@ -17,6 +18,13 @@ class CatchMySQLEvent:
 
 class _Catch:
     # 进程序列
+    CATCH_REDIS_CONNECT = True
+    CATCH_REDIS_TIMEOUT = True
+    CATCH_REDIS_DATA = True
+    CATCH_REDIS_WATCH = True
+    CATCH_REDIS_RESPONSE = True
+    CATCH_REDIS_READONLY = True
+
     def __init__(self, logger:_Logger):
         self.logger = logger
 
@@ -51,11 +59,50 @@ class _Catch:
             pass
         return wrapper
     
-    def DataBase(self):
-        # 数据库异常
-        def wrapper(*args, **kwargs):
-            pass
-        return wrapper
+    def DataBase(self, cache, disk, *,
+                callback:Callable=None,
+                error_callback:Callable=None
+            ):
+        """
+        :param cache: 缓存数据库(Redis)
+        :param disk: 磁盘数据库(MySQL)
+        :param callback: 正常运行时触发事件函数
+        :param callback: 异常时触发事件函数
+        """
+        # 复合数据库异常处理
+        def decorator(func):
+            @wraps(func)
+            def wrapper(cls, *args, **kwargs):
+                catched = True
+                try:
+                    res = func(cls, *args, **kwargs)
+                    self.logger.record(1, *args)
+                    catched =False
+                    return res
+                except ConnectionError:
+                    self.logger.record(1, "捕获到一个Connect异常")
+                    return False
+                except TimeoutError:
+                    self.logger.record(3, "捕获到一个Timemout异常")
+                    return False
+                except RedisDataError:
+                    self.logger.record(3, "捕获到一个Redis写入异常")
+                    return False
+                except MySQLDataError:
+                    self.logger.record(3, "捕获到一个MySQL写入异常")
+                    return False
+                finally:
+                    if not catched:
+                        if callback:\
+                        callback(res);\
+                        self.logger.record(1, "回调函数")
+                    else:
+                        if error_callback:\
+                        error_callback(cls, *args, **kwargs);\
+                        self.logger.record(2, "捕获到缓存异常，做降级处理， 数据写入MySQL")
+            return wrapper
+        return decorator
+
     
     def MySQL(self, type):
         if type == CatchMySQLEvent.CONNECT:
@@ -99,7 +146,14 @@ class _Catch:
             return wrapper
         return decorator
     
-    def Redis(self):
+    def Redis(self, *, 
+            connect=CATCH_REDIS_CONNECT,
+            timeout=CATCH_REDIS_TIMEOUT,
+            data=CATCH_REDIS_DATA,
+            watch=CATCH_REDIS_WATCH,
+            response=CATCH_REDIS_RESPONSE,
+            readonly=CATCH_REDIS_READONLY,
+        ):
         def decorator(func):
             @wraps(func)
             def wrapper(*args, **kwargs):
@@ -107,9 +161,28 @@ class _Catch:
                     res = func(*args, **kwargs)
                     self.logger.record(1, *args, **kwargs)
                     return res
-                except ConnectionError as e:
-                    self.logger.record(3, e)
-                    return False
+                except ConnectionError as e: # Redis连接异常，Redis服务器连接失败时触发
+                    self.logger.record(3, "Redis 连接错误， Redis服务是否运行 或者 Redis配置是否正确")
+                    if connect: return False
+                    raise e
+                except TimeoutError as e:    # 超时异常， Redis命令超时时触发
+                    self.logger.record(2, "Redis 超时", "未运行", *args[1:])
+                    if timeout: return False
+                    raise e
+                except WatchError as e:
+                    if watch: return False
+                    raise e
+                except RedisDataError as e:
+                    if data: return False
+                    raise e
+                except ResponseError as e:
+                    if response: return False
+                    raise e
+                except ReadOnlyError as e:
+                    if readonly: return False
+                    raise e
+                finally:
+                    pass
             return wrapper
         return decorator
     
