@@ -2,14 +2,15 @@ from pathlib import Path
 from .resolver import _Resolver
 
 
-WORKDIR = Path.cwd()
-PRIVATECONF = WORKDIR.joinpath("lib", "_init", ".config.xml")
-PUBLICCONF = WORKDIR.joinpath("lib", ".config.project.xml")
+MODULEPATH = Path(__file__).parent
+__PRIVATECONF = MODULEPATH.joinpath(".config.xml")
+__PUBLICCONF = MODULEPATH.parent.joinpath(".config.project.xml")
+
 
 Resolver = _Resolver
-resolver = _Resolver(PUBLICCONF)
 
-_resolver = _Resolver(PRIVATECONF)
+resolver = _Resolver(__PUBLICCONF)
+_resolver = _Resolver(__PRIVATECONF)
 
 __all__ = [
     "resolver",
