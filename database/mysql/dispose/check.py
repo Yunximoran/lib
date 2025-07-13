@@ -10,7 +10,7 @@ class Check:
         iNum = None
         for item in items:
             # 如果item不是可迭代对象，单条插入
-            if not isinstance(item, Iterable) and iNum is None:
+            if (not isinstance(item, Iterable) and iNum is None) or isinstance(item, str):
                 return items
             lens = len(item)
 

@@ -30,13 +30,14 @@
 				<li describe="跨域依赖包">django-cors-handers</li>
 			</extra-packages>
 		</django>
-		<vue>
-			<host>localhost</host>
-			<port>8080</port>
-			<cors items="跨域列表">
-				<li>http://localhost:8000</li>
-				<li>https://localhost:8000</li>
-			</cors>
-		</vue>
 	</services>
+	<!-- <depend>
+		<pytyon>3.12.9</python>
+		<packages>
+			<li>redis</li>
+			<li>pymysql</li>
+			<li>django</li>
+			<li>django-cors-handers</li>
+		</packages>
+	</depend> -->
 </root>

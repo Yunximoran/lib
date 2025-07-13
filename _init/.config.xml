@@ -8,7 +8,7 @@
 		<mysql user="root" password="b'cmFueGk='">
 			<host>localhost</host>
 			<port>3306</port>
-			<db>sys</db>
+			<db>djangodata</db>
 		</mysql>
 	</database>
 	<preformance>
