@@ -40922,3 +40922,81 @@ where table_schema='djangodata' and table_name='userdata' order by ordinal_posit
 2025-07-12 14:26:46,513 - dbmq - INFO - Update eeee_views Set usrid = '101', count = 15 Where usrid = '101' 
 
 
+2025-07-13 20:59:42,949 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-13 20:59:42,997 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-13 20:59:42,998 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='detialindex' order by ordinal_position
+
+
+2025-07-13 20:59:42,998 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-13 20:59:43,283 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-13 20:59:43,326 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-13 20:59:43,328 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='detialindex' order by ordinal_position
+
+
+2025-07-13 20:59:43,328 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-13 21:01:57,111 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-13 21:01:57,153 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-13 21:01:57,154 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='detialindex' order by ordinal_position
+
+
+2025-07-13 21:01:57,155 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-13 21:01:57,342 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-13 21:01:57,343 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='detialindex' order by ordinal_position
+
+
+2025-07-13 21:01:57,344 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-13 21:01:57,345 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-13 21:01:57,345 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='detialindex' order by ordinal_position
+
+
+2025-07-13 21:01:57,346 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-13 21:01:57,420 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-13 21:01:57,464 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-13 21:01:57,465 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='detialindex' order by ordinal_position
+
+
+2025-07-13 21:01:57,465 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+
+2025-07-13 21:03:21,227 - dbmq - INFO - connect to mysql service, current: djangodata
+
+
+2025-07-13 21:03:21,274 - dbmq - INFO - select table_name from information_schema.tables where table_schema = 'djangodata'
+
+
+2025-07-13 21:03:21,274 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='detialindex' order by ordinal_position
+
+
+2025-07-13 21:03:21,275 - dbmq - INFO - select column_name, data_type, column_key from information_schema.columns where table_schema='djangodata' and table_name='userdata' order by ordinal_position
+
+

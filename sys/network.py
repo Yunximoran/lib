@@ -4,9 +4,9 @@ import platform
 import time
 
 class _NetWorkTools:
-
     net_if_addrs = psutil.net_if_addrs()
     net_if_stats = psutil.net_if_stats()
+    
     @staticmethod
     def check_speed(interface, interval=1):
         # 获取初始网络统计信息
@@ -142,4 +142,3 @@ class NetWork(_NetWorkTools):
 
 if __name__ == "__main__":
     L = NetWork.decimalcidrblock("127.0.0.1")
-    print(L)

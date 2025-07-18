@@ -1,3 +1,4 @@
+<!-- <?xml-model href=".config.project.xsd"?> -->
 <root>
 	<default describe="项目配置">
 		<log-settings describe="logger 默认配置">
@@ -13,7 +14,8 @@
 		</log-settings>
 		<encoding>utf-8</encoding>
 	</default>
-	<services>
+	
+	<services describe="">
 		<django user="yumo" password="b'cmFueGk='" email="2970368069@qq.com">
 			<host>localhost</host>
 			<port>8000</port>
@@ -31,13 +33,82 @@
 			</extra-packages>
 		</django>
 	</services>
-	<!-- <depend>
-		<pytyon>3.12.9</python>
-		<packages>
-			<li>redis</li>
-			<li>pymysql</li>
-			<li>django</li>
-			<li>django-cors-handers</li>
-		</packages>
-	</depend> -->
+
+	<projects describe="独立项目配置集合">
+		<cache-database describe="Django笔试项目">
+			<host>localhost</host>
+			<port>8000</port>
+			<reload>true</reload>
+			<model describe="django服务模块导入路径">services.django</model>
+			<extra-settings>
+				<MIDDLEWARE type="list" mode="a">corsheaders.middleware.CorsMiddleware</MIDDLEWARE>
+				<CORS_ALLOWED_ORIGINS items="跨域列表">
+					<li>http://localhost:8080</li>
+					<li>https://localhost:8080</li>
+				</CORS_ALLOWED_ORIGINS>
+			</extra-settings>
+			<extra-packages items="需要额外安装的包列表">
+				<li describe="跨域依赖包">django-cors-handers</li>
+				<li describe="websocket">clannels</li>
+			</extra-packages>
+		</cache-database>
+
+		<remote-control-server describe="远程控制系统服务端">
+			<app describe="application模块">core.app</app>
+			<host describe="FastAPI运行地址">127.0.0.1</host>
+			<port describe="FastAPI运行端口">8000</port>
+			<reload describe="是否热重载">true</reload>
+			<network name="WLAN">
+				<ip>192.168.31.176</ip>
+				<mac>20-1E-88-F5-05-B9</mac>
+				<listen-heartpkg>
+					<bind>0.0.0.0</bind>
+					<bind-port>8082</bind-port>
+				</listen-heartpkg>
+				<listen-reports>
+					<bind-port>8084</bind-port>
+				</listen-reports>
+				<send-instructs>
+					<bind-port>9095</bind-port>
+					<bind-port-file>8086</bind-port-file>
+					<link-port>8085</link-port>
+				</send-instructs>
+			</network>
+			<preformance>
+				<min-processes>5</min-processes>
+				<max-processes>10</max-processes>
+				<tcp-listenes>5</tcp-listenes>
+				<recv-size>1024</recv-size>
+				<timeout>5</timeout>
+			</preformance>
+		</remote-control-server>
+		
+		<remote-control-client describe="远程控制系统客户端">
+			<network name="WLAN">
+				<ip>192.168.31.176</ip>
+				<mac>20-1E-88-F5-05-B9</mac>
+				<broad-heartpkg type="UDP">
+					<bind>0.0.0.0</bind>
+					<bind-port>8082</bind-port>
+					<link>255.255.255.255</link>
+					<link-port>8082</link-port>
+				</broad-heartpkg>
+
+				<listen-softlist type="UDP">
+					<bind>0.0.0.0</bind>
+					<bind-port>8083</bind-port>
+					<link>224.25.25.1</link>
+					<link-port>8083</link-port>
+				</listen-softlist>
+
+				<listen-shell type="TCP">
+					<bind>127.0.0.1</bind>
+					<bind-port>8085</bind-port>
+					<link>192.168.31.176</link>
+					<link-port>9095</link-port>
+					<bind-port-file>8086</bind-port-file>
+				</listen-shell>
+			</network>
+		</remote-control-client>
+	</projects>
 </root>
